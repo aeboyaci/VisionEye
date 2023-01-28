@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id          String @id @default(uuid())
+  email       String @unique
+  displayName String
+  avatarUrl   String
+
+  playerConnectionInformation PlayerConnectionInformation?
+}
+
+model PlayerConnectionInformation {
+  id     String       @id @default(uuid())
+  status PlayerStatus @default(ONLINE)
+  ipAddress String
+
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId String @unique
+}
+
+enum PlayerStatus {
+  ONLINE
+  OFFLINE
+}
