@@ -5,6 +5,7 @@ import session from "express-session";
 import setupPassport from "./utils/passport-setup";
 
 import authenticationRouter from "./routers/authentication";
+import invitationRouter from "./routers/invitation";
 
 const app = express();
 app.set("trust proxy", true)
@@ -17,9 +18,12 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 setupPassport();
 
 app.use("/oauth2", authenticationRouter);
+app.use("/invitations", invitationRouter);
 
 app.listen(PORT, () => {
   console.log(`[INFO] Server started!\n${BASE_URL}/`);

@@ -52,7 +52,7 @@ CREATE TABLE "team_has_players" (
 CREATE TABLE "invitation" (
     "id" TEXT NOT NULL,
     "sender_player_id" TEXT NOT NULL,
-    "receiever_player_id" TEXT NOT NULL,
+    "receiver_player_id" TEXT NOT NULL,
     "status" "invitation_status" NOT NULL DEFAULT 'PENDING',
     "team_id" TEXT NOT NULL,
 
@@ -135,7 +135,7 @@ ALTER TABLE "team_has_players" ADD CONSTRAINT "team_has_players_player_id_fkey" 
 ALTER TABLE "invitation" ADD CONSTRAINT "invitation_sender_player_id_fkey" FOREIGN KEY ("sender_player_id") REFERENCES "player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "invitation" ADD CONSTRAINT "invitation_receiever_player_id_fkey" FOREIGN KEY ("receiever_player_id") REFERENCES "player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "invitation" ADD CONSTRAINT "invitation_receiver_player_id_fkey" FOREIGN KEY ("receiver_player_id") REFERENCES "player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "invitation" ADD CONSTRAINT "invitation_team_id_fkey" FOREIGN KEY ("team_id") REFERENCES "team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
