@@ -233,8 +233,15 @@
     
   ```json
   {
-    "teamId": "...",
-    "teamName": "..."
+    "team": {
+      "id": "...",
+      "name": "..."
+    },
+    "relayServer": {
+      "ipv4": "...",
+      "port": 1234,
+      "joinCode": "..."
+    }
   }
   ```
     
@@ -251,6 +258,11 @@
 
 - Deserialize player from ACCESS_TOKEN, and check if the player is the captain member of the team with given team id
 - Update the entry with team id in "team" table
+- Add new entry to "relay_server" table. Entry:
+    - team_id → “id” field of the entry added to “team” table
+    - ipv4 → "relayServer.ipv4" field in request body
+    - port → "relayServer.port" field in request body
+    - join_code → "relayServer.joinCode" field in request body
 
 **GET** `/teams/:teamId`
 
