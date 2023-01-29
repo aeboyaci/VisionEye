@@ -38,13 +38,12 @@ function setup() {
       });
 
       if (dbUser !== null) {
-        await database.playerConnectionInformation.update({
+        await database.player.update({
           where: {
-            playerId: dbUser.id,
+            id: dbUser.id,
           },
           data: {
-            status: "ONLINE",
-            ipAddress: request.ip,
+            is_online: true,
           },
         });
 
@@ -53,29 +52,17 @@ function setup() {
       }
 
       let newUser = {
-        displayName: profile.displayName,
+        display_name: profile.displayName,
         email: playerEmail,
-        avatarUrl: playerImage,
+        avatar_url: playerImage,
       };
-      await database.$transaction(async (tx) => {
-        const createdUser = await tx.player.create({
-          data: { ...newUser }
-        });
-
-        await tx.playerConnectionInformation.create({
-          data: {
-            ipAddress: request.ip,
-            player: {
-              connect: { id: createdUser.id },
-            },
-          },
-          include: {
-            player: true,
-          },
-        });
-
-        done(null, createdUser);
+      const createdUser = await database.player.create({
+        data: {
+          is_online: true,
+          ...newUser,
+        },
       });
+      done(null, createdUser);
     })
   );
 }

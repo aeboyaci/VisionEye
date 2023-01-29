@@ -8,7 +8,6 @@ import authenticationRouter from "./routers/authentication";
 
 const app = express();
 app.set("trust proxy", true)
-setupPassport();
 
 app.use(session({
   secret: COOKIE_SECRET,
@@ -18,6 +17,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+setupPassport();
 
 app.use("/oauth2", authenticationRouter);
 

@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import { database } from "../prisma/database";
 
-export function authorize(req: Request, resp: Response, next: NextFunction) {
+export function enforceAuthentication(req: Request, resp: Response, next: NextFunction) {
   const isAuthenticated = req.isAuthenticated();
 
   if (!isAuthenticated) {
@@ -35,28 +35,18 @@ router.get("/google/callback/failure", (req, resp, next) => {
   });
 });
 
-router.get("/google/logout", authorize, async (req, resp, next) => {
-  req.logout((err) => {
-    if (Boolean(err)) {
-      return resp.status(200).json({
-        success: false,
-        error: "logging out failed",
-      });
-    }
-
-    database.playerConnectionInformation.update({
+router.get("/google/logout", enforceAuthentication, async (req, resp, next) => {
+  req.session.destroy(() => {
+    database.player.update({
       where: {
-        playerId: req.user?.id,
+        id: req.user?.id,
       },
       data: {
-        status: "OFFLINE",
+        is_online: false,
       },
     });
 
-    return resp.status(200).json({
-      success: true,
-      data: "successfully logged out",
-    });
+    return resp.redirect("/oauth2/google/check");
   });
 });
 
