@@ -1,6 +1,6 @@
 
 
-Multiplayer Mechanics For Unity
+# Multiplayer Mechanics For Unity
 
 The mechanism that we are planning to use is the Relay Server architecture. Here, the relay server is the main server that other players connect. 
 
