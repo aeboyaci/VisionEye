@@ -6,7 +6,7 @@ The mechanism that we are planning to use is the Relay Server architecture. Here
 
 We will be using Netcode for Game Objects package of Unity as it allows the users to send game objects instead of specific instructions which makes the synchronizing quite easy. By synchronizing, we mean the location and movements of each player.
 
-![alt text](https://github.com/aeboyaci/VisionEye/blob/feature/Task-8/bahadirkaratas/RnD/Multi-Player/Image%201.02.2023%20at%2021.32.jpg)
+![alt text](https://github.com/aeboyaci/VisionEye/blob/30d1567053cb70331eff4248c539704d9ae277ce/RnD/Multi-Player/Image%201.02.2023%20at%2021.32.jpg)
 
 
 In the game, the players will be getting their team information from our API and each team will have an independent relay server. Once a team leader is chosen, a relay server will start running on his side. The other team members will be invited by the team leader and again, these invitations will get them through the API.
