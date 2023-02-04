@@ -102,21 +102,24 @@ model game {
 }
 
 model achievement {
-  id          String @id @default(uuid())
-  name        String @unique
-  description String
-  image_url   String
-  score       Int
+  id                      String                    @id @default(uuid())
+  name                    String                    @unique
+  description             String
+  image_url               String
+  score                   Int
+  player_has_achievements player_has_achievements[]
 }
 
 model player_has_achievements {
-  player_id String
-  game_id   String
-  team_id   String
+  player_id      String
+  game_id        String
+  team_id        String
+  achievement_id String
 
-  player player @relation(fields: [player_id], references: [id], onDelete: Cascade)
-  team   team   @relation(fields: [team_id], references: [id], onDelete: Cascade)
-  game   game   @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  player     player      @relation(fields: [player_id], references: [id], onDelete: Cascade)
+  team       team        @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  game       game        @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  achivement achievement @relation(fields: [achievement_id], references: [id], onDelete: Cascade)
 
-  @@id([player_id, game_id, team_id])
+  @@id([player_id, game_id, team_id, achievement_id])
 }
