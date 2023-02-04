@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-Public APIs
-=======
 # Public APIs
 
 ## Text-to-Speech API:
@@ -49,4 +46,4 @@ When the Trivia API is accessed, it returns a JSON formatted data which contains
 It is allowed to use the questions from the API for non-commercial use (educational, personal etc). The free version has some limitations about the features and the rate limit. However, I believe we can use our own API to get our project running with the free version. If not, the paid versions are not too expensive so using a paid version is an option as well. 
 
 
->>>>>>> 3af4c98e6e245e5a72e3edc564f8ba4a4bfb8992
+
