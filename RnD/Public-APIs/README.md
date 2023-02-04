@@ -7,19 +7,27 @@ Google Text-to-Speech allows developers to create natural-sounding, synthetic hu
 ### How to Use Text-to-Speech API
 In order to get an audio file for the given text (the process is called synthesis), a POST request should be sent to the synthesize endpoint.
 
+<a href="url"><img src="https://github.com/aeboyaci/VisionEye/blob/document/Task2/bahadirkaratas/RnD/Public-APIs/Figures/Request_Body.png" height="420" width="512" ></a>
+
+
 POST https://texttospeech.googleapis.com/v1/text:synthesize
 
 The body of the request should include three essential components which are:
   
- &emsp; **Input:** 
+**Input:** 
   The input can be a plain text or an SSML document.
 
- &emsp; **Voice:**
-  The voice parameter is used to specify the language,  selection of the voice (there are several options) and the gender selection (which is optional and might not be available with a specific language or voice selection). 
+<a href="url"><img src="https://github.com/aeboyaci/VisionEye/blob/document/Task2/bahadirkaratas/RnD/Public-APIs/Figures/Input_Text.png" height="350" width="700" ></a>
 
- &emsp; **AudioConfig:**
+**Voice:**
+  The voice parameter is used to specify the language,  selection of the voice (there are several options) and the gender selection (which is optional and might not be available with a specific language or voice selection). 
+  
+  <a href="url"><img src="https://github.com/aeboyaci/VisionEye/blob/document/Task2/bahadirkaratas/RnD/Public-APIs/Figures/Request.png" height="600" width="700" ></a>
+
+**AudioConfig:**
   The AudioConfig parameter is used to determine the configuration of API’s output audio file. It must contain the encoding information. There are also numerous options that can be used for the configuration that can be found at the figure below:
 
+  <a href="url"><img src="https://github.com/aeboyaci/VisionEye/blob/document/Task2/bahadirkaratas/RnD/Public-APIs/Figures/Config.png" height="600" width="700" ></a>
 
 ### Pricing
 Google does not provide a free-of-charge version of the Text-to-Speech API. However, every new  Google Cloud user gets a 300$ worth of free credit. This way, we can use the API for our application without having to pay.
@@ -35,7 +43,7 @@ The Trivia API also allows the user to create sessions so no duplicate questions
 ## How Does the Response Look Like:
 When the Trivia API is accessed, it returns a JSON formatted data which contains the question, the answer options, the correct answer  and the metadata of the question which includes category, tags etc.
 
-
+<a href="url"><img src="https://github.com/aeboyaci/VisionEye/blob/document/Task2/bahadirkaratas/RnD/Public-APIs/Figures/Trivia.png" height="420" width="512" ></a>
 
 
 
