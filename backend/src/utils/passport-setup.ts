@@ -60,6 +60,11 @@ function setup() {
         data: {
           is_online: true,
           ...newUser,
+          scoreboard: {
+            create: {
+              score: 0,
+            },
+          },
         },
       });
       done(null, createdUser);
