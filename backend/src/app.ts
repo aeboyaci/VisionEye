@@ -6,6 +6,11 @@ import setupPassport from "./utils/passport-setup";
 
 import authenticationRouter from "./routers/authentication";
 import invitationRouter from "./routers/invitation";
+import scoreboardRouter from "./routers/scoreboard";
+
+(BigInt.prototype as any).toJSON = function () {
+  return parseInt(this.toString());
+};
 
 const app = express();
 app.set("trust proxy", true)
@@ -24,6 +29,7 @@ setupPassport();
 
 app.use("/oauth2", authenticationRouter);
 app.use("/invitations", invitationRouter);
+app.use("/scoreboard", scoreboardRouter);
 
 app.listen(PORT, () => {
   console.log(`[INFO] Server started!\n${BASE_URL}/`);
