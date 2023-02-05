@@ -50,22 +50,4 @@ router.get("/google/logout", enforceAuthentication, async (req, resp, next) => {
   });
 });
 
-router.get("/google/check", (req, resp, next) => {
-  const isAuthenticated = req.isAuthenticated();
-
-  if (isAuthenticated) {
-    const player = req.user;
-
-    return resp.status(200).json({
-      success: true,
-      data: player,
-    });
-  }
-
-  return resp.status(200).json({
-    success: true,
-    data: "You are not logged in yet",
-  });
-});
-
 export default router;
