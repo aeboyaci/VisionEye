@@ -305,6 +305,26 @@
 - join “achievement” table with (4) ON (4).achievement_id/achievement.id → (6)
 - Aggregate the values to sum achievement scores, and calculate game durations (game.end_date - game.start_date)
 
+**GET** `/teams/:teamId/relay-server`
+
+- Headers:
+    - Cookies → ACCESS_TOKEN
+- Response:
+    
+  ```json
+  {
+    "ipv4": "...",
+    "port": 1234,
+    "joinCode": "..."
+  }
+  ```
+    
+
+**Acceptance Criteria:**
+
+- Check if the deserialized player is a member of the team
+- join “team” table with “relay_server” table ON team.id/relay_server.team_id
+
 **POST** `/games`
 
 - Headers:
