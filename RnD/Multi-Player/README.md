@@ -13,6 +13,6 @@ In the game, the players will be getting their team information from our API and
 
 Once the players get their team information, they will be able to connect to the relay server for their team by a unique team code.
 
-Relay server will only be responsible for the mechanics, the scoreboard, achievements and other game statistics will be sent and saved through the API.
+Relay server will only be responsible for the mechanics; the scoreboard, achievements and other game statistics will be sent and saved through the API.
 
 
