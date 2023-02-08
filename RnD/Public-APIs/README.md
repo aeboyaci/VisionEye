@@ -2,6 +2,7 @@
 
 ## Text-to-Speech API:
 https://cloud.google.com/text-to-speech
+
 Google Text-to-Speech allows developers to create natural-sounding, synthetic human speech as playable audio. This way, the created audio can be integrated with the developed applications. We will use this API to get compelling audio that is relevant to our story. Instead of having to record voices, we will produce them from text.
 
 ### How to Use Text-to-Speech API
@@ -34,6 +35,7 @@ Google does not provide a free-of-charge version of the Text-to-Speech API. Howe
 
 ## Trivia:
 https://the-trivia-api.com/docs
+
 The puzzles in the game might be containing some quizzes that dynamically change every time a player encounters them. We will be using the Trivia API in order to get that dynamic questions. The integration of the Trivia API will be integrated through our own API. The users will access our API’s endpoint to get the quizzes while we get them through the Trivia API.
 
 ### How to Use the Trivia API:
