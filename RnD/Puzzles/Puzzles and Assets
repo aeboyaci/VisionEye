@@ -1,10 +1,11 @@
-This file gives brief explanation about assets and provides information on the creation and the solution of puzzles.
+This file gives brief explanation about assets and provides information on the creation and the solution of possible puzzles.
 
 
 Puzzle Stories
--Among the many boxes in the first room, there is an NPC or a hint inside the note that indicates which of them has the key.
+-Among the many boxes in the room, there is an NPC or a hint inside the note that indicates which of them has the key.
 Ex: Inside the note is a hint that expresses the color of the box containing the key. “What happens if you mix green with red? (Yellow)”, therefore, it is requested to
 open the yellow box. 
+-A note in a note with the last 3 digits of the girl's date of birth of the safe's password. Therefore, the girl's date of birth is searched in the room.
 -Written or verbal hints are given by the NPCs next to their boxes to find the safe's password. The door of the room is exited with the key or the relevant tool that 
 will come out of the safe.
 Ex : A math operation to find the first digit of the password is the number of a particular item in the room for the second digit, and a number embedded in the 
@@ -22,14 +23,15 @@ room started. When it comes to the exit door of the house, the numbers in the ro
 be opened. Players who will not be informed about this in the game will think of using the numbers in these tables that have nothing to do with anything else.
 
 Bulmaca Hikayeleri
--İlk oda içerisinde bulunan birçok kutulardan hangisinin içerisinde anahtar olduğunu belirten bir NPC ya da not içerisinde ipucu vardır.
+- Oda içerisinde bulunan birçok kutulardan hangisinin içerisinde anahtar olduğunu belirten bir NPC ya da not içerisinde ipucu vardır.
 Ex: Not içerisinde anahttarı barındıran kutunun rengini ifade eden “yeşille kırmızıyı karıştırırsan ne olur? (Sarı)” dolayısıyla sarı kutunun açılması istenir. 
+-Bir Not içerisinde kasanın şifresinin kızın doğum tarihinin son 3 rakamı yazan bir not. Dolayısıyla odanın içerisinde kızın doğum tarihi aranır.
 - Kutularının yanlarında bulunan NPC’ler tarafından yazılı veya sözlü olarak kasanın şifresini bulmaya yönelik ipuçları verilir. Kasadan çıkacak olan anahtaar ya da 
 ilgili aletle odanın kapısından çıkılır.
 Ex : Şifrenin ilk rakamının bulunması için bir matematik işlemi ikinci rakamı için oda içerisindeki belirli bir eşyanın sayısı üçüncü rakam için ise NPCnin üzerindeki
-kıyafete gmülmüş bir rakam.    
+kıyafete gömülmüş bir rakam.    
 - Oda içerisinde bulununan notlardaki bilmeceler aracılığıyla odanın içerisindeki switch, levers ve valves arasından hangilerinin aktive edildiği takdirde odadan
-çıkılabileceğine ynelik ip uçları bulunacaktır.
+çıkılabileceğine yönelik ip uçları bulunacaktır.
 Ex: Oda içerisinde köşelerde bulunan Levers aktive edilecek ve düğmelere bir ara verilecek şekilde basılacak.
 - Fuse Box’ın içerisindeki elemanların hangi sırayla hizalanması gerektiğini belirten bir not bir önceki sandıkla aynı şifreye sahip bir sandık içerisinden çıkan bir 
 notta belirtilmelidir. Fuse box çözüldüğü takdirde odadan kaçılabilmektedir.
