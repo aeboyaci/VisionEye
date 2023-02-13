@@ -1,10 +1,6 @@
 **/node_modules
-<<<<<<< HEAD
 
 **/.env
-
-
-
 
 # This .gitignore file should be placed at the root of your Unity project directory
 
@@ -165,7 +161,4 @@
 
 **/[Aa]ssets/[Ss]treamingAssets/aa/*
 
-=======
-**/.env
 **/database_storage
->>>>>>> 3af4c98e6e245e5a72e3edc564f8ba4a4bfb8992
