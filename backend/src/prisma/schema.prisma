@@ -97,7 +97,7 @@ model game {
   room_id                 String
   room                    room                      @relation(fields: [room_id], references: [id], onDelete: Cascade)
   started_at              DateTime                  @default(now())
-  ended_at                DateTime
+  ended_at                DateTime?
   player_has_achievements player_has_achievements[]
 }
 
@@ -116,10 +116,10 @@ model player_has_achievements {
   team_id        String
   achievement_id String
 
-  player     player      @relation(fields: [player_id], references: [id], onDelete: Cascade)
-  team       team        @relation(fields: [team_id], references: [id], onDelete: Cascade)
-  game       game        @relation(fields: [game_id], references: [id], onDelete: Cascade)
-  achivement achievement @relation(fields: [achievement_id], references: [id], onDelete: Cascade)
+  player      player      @relation(fields: [player_id], references: [id], onDelete: Cascade)
+  team        team        @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  game        game        @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  achievement achievement @relation(fields: [achievement_id], references: [id], onDelete: Cascade)
 
   @@id([player_id, game_id, team_id, achievement_id])
 }

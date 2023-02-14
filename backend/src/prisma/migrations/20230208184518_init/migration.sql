@@ -82,7 +82,7 @@ CREATE TABLE "game" (
     "team_id" TEXT NOT NULL,
     "room_id" TEXT NOT NULL,
     "started_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "ended_at" TIMESTAMP(3) NOT NULL,
+    "ended_at" TIMESTAMP(3),
 
     CONSTRAINT "game_pkey" PRIMARY KEY ("id")
 );
@@ -103,8 +103,9 @@ CREATE TABLE "player_has_achievements" (
     "player_id" TEXT NOT NULL,
     "game_id" TEXT NOT NULL,
     "team_id" TEXT NOT NULL,
+    "achievement_id" TEXT NOT NULL,
 
-    CONSTRAINT "player_has_achievements_pkey" PRIMARY KEY ("player_id","game_id","team_id")
+    CONSTRAINT "player_has_achievements_pkey" PRIMARY KEY ("player_id","game_id","team_id","achievement_id")
 );
 
 -- CreateIndex
@@ -157,3 +158,6 @@ ALTER TABLE "player_has_achievements" ADD CONSTRAINT "player_has_achievements_te
 
 -- AddForeignKey
 ALTER TABLE "player_has_achievements" ADD CONSTRAINT "player_has_achievements_game_id_fkey" FOREIGN KEY ("game_id") REFERENCES "game"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "player_has_achievements" ADD CONSTRAINT "player_has_achievements_achievement_id_fkey" FOREIGN KEY ("achievement_id") REFERENCES "achievement"("id") ON DELETE CASCADE ON UPDATE CASCADE;
