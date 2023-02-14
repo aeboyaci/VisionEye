@@ -163,3 +163,5 @@
 
 **/database_storage
 backend/dist
+
+**/.idea
