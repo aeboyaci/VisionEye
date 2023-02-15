@@ -74,7 +74,8 @@ router.get("/", enforceAuthentication, async (req, resp, next) => {
                                                   INNER JOIN team ON team.id = player_has_achievements.team_id
                                                   INNER JOIN achievement ON achievement.id = player_has_achievements.achievement_id
                                          GROUP BY team_id, player_id, game_id)
-        SELECT team."name"                     as "name",
+        SELECT team.id                         as "id",
+               team."name"                     as "name",
                CASE
                    WHEN achievement_information.total_score IS NULL THEN 0
                    ELSE achievement_information.total_score
@@ -95,6 +96,79 @@ router.get("/", enforceAuthentication, async (req, resp, next) => {
     return resp.status(200).json({
       success: true,
       data: result,
+    });
+  } catch (ex) {
+    return resp.status(500).json({
+      success: false,
+      error: ex,
+    });
+  }
+});
+
+router.get("/create", enforceAuthentication, async (req, resp, next) => {
+  const player = req.user!;
+
+  try {
+    await database.$transaction(async (tx) => {
+      const team = await tx.team.create({
+        data: {},
+      });
+
+      await tx.team_has_players.create({
+        data: {
+          team_id: team.id,
+          player_id: player.id,
+          is_captain: true
+        },
+      });
+
+      return resp.status(200).json({
+        success: true,
+        data: {
+          teamId: team.id,
+        },
+      });
+    });
+  } catch (ex) {
+    return resp.status(500).json({
+      success: false,
+      error: ex,
+    });
+  }
+});
+
+router.post("/update", enforceAuthentication, async (req, resp, next) => {
+  const player = req.user!;
+
+  try {
+    const body: TeamInformation = req.body;
+    const { isCaptain } = await checkIfThePlayerIsAMember(body.team.id, player.id);
+    if (!isCaptain) {
+      return resp.status(401).json({
+        success: false,
+        error: "You are not allowed to this operation",
+      });
+    }
+
+    await database.team.update({
+      where: {
+        id: body.team.id,
+      },
+      data: {
+        name: body.team.name,
+        relay_server: {
+          create: {
+            ipv4: body.relayServer.ipv4,
+            port: body.relayServer.port,
+            join_code: body.relayServer.joinCode,
+          },
+        },
+      },
+    });
+
+    return resp.status(200).json({
+      success: true,
+      data: "team updated successfully",
     });
   } catch (ex) {
     return resp.status(500).json({
@@ -170,7 +244,7 @@ router.get("/:teamId", enforceAuthentication, async (req, resp, next) => {
 
     return resp.status(200).json({
       success: true,
-      data: result.length > 0 ? result : [],
+      data: result.length > 0 ? result[0] : null,
     });
   } catch (ex) {
     return resp.status(500).json({
@@ -290,79 +364,6 @@ router.post("/:teamId/invitations", enforceAuthentication, async (req, resp, nex
     return resp.status(200).json({
       success: true,
       data: "player successfully invited",
-    });
-  } catch (ex) {
-    return resp.status(500).json({
-      success: false,
-      error: ex,
-    });
-  }
-});
-
-router.get("/create", enforceAuthentication, async (req, resp, next) => {
-  const player = req.user!;
-
-  try {
-    await database.$transaction(async (tx) => {
-      const team = await tx.team.create({
-        data: {},
-      });
-
-      await tx.team_has_players.create({
-        data: {
-          team_id: team.id,
-          player_id: player.id,
-          is_captain: true
-        },
-      });
-
-      return resp.status(200).json({
-        success: true,
-        data: {
-          teamId: team.id,
-        },
-      });
-    });
-  } catch (ex) {
-    return resp.status(500).json({
-      success: false,
-      error: ex,
-    });
-  }
-});
-
-router.post("/update", enforceAuthentication, async (req, resp, next) => {
-  const player = req.user!;
-
-  try {
-    const body: TeamInformation = req.body;
-    const { isCaptain } = await checkIfThePlayerIsAMember(body.team.id, player.id);
-    if (!isCaptain) {
-      return resp.status(401).json({
-        success: false,
-        error: "You are not allowed to this operation",
-      });
-    }
-
-    await database.team.update({
-      where: {
-        id: body.team.id,
-      },
-      data: {
-        name: body.team.name,
-        relay_server: {
-          create: {
-            ipv4: body.relayServer.ipv4,
-            port: body.relayServer.port,
-            join_code: body.relayServer.joinCode,
-          },
-        },
-      },
-    });
-
-    return resp.status(200).json({
-      success: true,
-      data: "team updated successfully",
     });
   } catch (ex) {
     return resp.status(500).json({
