@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model player {
+  id           String  @id @default(uuid())
+  email        String  @unique
+  display_name String
+  avatar_url   String
+  is_online    Boolean
+
+  scoreboard              scoreboard?
+  team_has_players        team_has_players[]
+  invitation_sender       invitation[]              @relation(name: "invitation_sender")
+  invitation_receiver     invitation[]              @relation(name: "invitation_receiver")
+  player_has_achievements player_has_achievements[]
+}
+
+model scoreboard {
+  player_id String @id
+  player    player @relation(fields: [player_id], references: [id], onDelete: Cascade)
+  score     Int    @default(0)
+}
+
+model team {
+  id         String   @id @default(uuid())
+  name       String   @default("")
+  created_at DateTime @default(now())
+
+  relay_server            relay_server?
+  team_has_players        team_has_players[]
+  invitation              invitation[]
+  game                    game[]
+  player_has_achievements player_has_achievements[]
+}
+
+model relay_server {
+  team_id   String @id
+  team      team   @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  ipv4      String
+  port      Int
+  join_code String
+}
+
+model team_has_players {
+  team_id    String
+  player_id  String
+  is_captain Boolean
+
+  team   team   @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  player player @relation(fields: [player_id], references: [id], onDelete: SetNull)
+
+  @@id([team_id, player_id])
+}
+
+model invitation {
+  id                 String            @id @default(uuid())
+  sender             player            @relation(name: "invitation_sender", fields: [sender_player_id], references: [id], onDelete: Cascade)
+  sender_player_id   String
+  receiver           player            @relation(name: "invitation_receiver", fields: [receiver_player_id], references: [id], onDelete: Cascade)
+  receiver_player_id String
+  status             invitation_status @default(PENDING)
+  team               team              @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  team_id            String
+}
+
+enum invitation_status {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model room {
+  id        String @id @default(uuid())
+  name      String @unique
+  story     String
+  image_url String
+
+  config config[]
+  game   game[]
+}
+
+model config {
+  room_id String @id
+  details Json?
+  room    room   @relation(fields: [room_id], references: [id])
+}
+
+model game {
+  id                      String                    @id @default(uuid())
+  team_id                 String
+  team                    team                      @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  room_id                 String
+  room                    room                      @relation(fields: [room_id], references: [id], onDelete: Cascade)
+  started_at              DateTime                  @default(now())
+  ended_at                DateTime?
+  player_has_achievements player_has_achievements[]
+}
+
+model achievement {
+  id                      String                    @id @default(uuid())
+  name                    String                    @unique
+  description             String
+  image_url               String
+  score                   Int
+  player_has_achievements player_has_achievements[]
+}
+
+model player_has_achievements {
+  player_id      String
+  game_id        String
+  team_id        String
+  achievement_id String
+
+  player      player      @relation(fields: [player_id], references: [id], onDelete: Cascade)
+  team        team        @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  game        game        @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  achievement achievement @relation(fields: [achievement_id], references: [id], onDelete: Cascade)
+
+  @@id([player_id, game_id, team_id, achievement_id])
+}

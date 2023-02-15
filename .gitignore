@@ -162,3 +162,6 @@
 **/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 **/database_storage
+backend/dist
+
+**/.idea
