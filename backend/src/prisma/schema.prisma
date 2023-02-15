@@ -87,12 +87,13 @@ model room {
 
 model config {
   room_id String @id
+  details Json?
   room    room   @relation(fields: [room_id], references: [id])
 }
 
 model game {
   id                      String                    @id @default(uuid())
-  team_id                 String                    @unique
+  team_id                 String
   team                    team                      @relation(fields: [team_id], references: [id], onDelete: Cascade)
   room_id                 String
   room                    room                      @relation(fields: [room_id], references: [id], onDelete: Cascade)
