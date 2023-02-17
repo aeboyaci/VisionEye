@@ -97,6 +97,36 @@
 
 - Deserialize player using ACCESS_TOKEN and ID_TOKEN, and update
 
+**GET** `/players`
+
+- Headers:
+  - access_token → ACCESS_TOKEN
+  - id_token → ID_TOKEN
+
+- Response:
+
+  ```json
+  {
+    "success": true,
+    "data": [
+      {
+        "playerId": "...",
+        "displayName": "...",
+        "avatarUrl": "..."
+      },
+      {
+        "playerId": "...",
+        "displayName": "...",
+        "avatarUrl": "..."
+      }
+    ]
+  }
+  ```
+
+**Acceptance Criteria:**
+
+- Get online players from "player" table
+
 **POST** `/teams/:teamId/invitations`
 
 - Headers:
