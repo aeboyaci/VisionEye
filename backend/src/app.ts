@@ -8,6 +8,7 @@ import scoreboardRouter from "./routers/scoreboard";
 import teamRouter from "./routers/team";
 import achievementRouter from "./routers/achievement";
 import gameRouter from "./routers/game";
+import playerRouter from "./routers/player";
 
 (BigInt.prototype as any).toJSON = function () {
   return parseInt(this.toString());
@@ -31,6 +32,7 @@ app.use("/scoreboard", scoreboardRouter);
 app.use("/teams", teamRouter);
 app.use("/achievements", achievementRouter);
 app.use("/games", gameRouter);
+app.use("/players", playerRouter);
 
 app.listen(PORT, () => {
   console.log(`[INFO] Server started!\n${BASE_URL}/`);
