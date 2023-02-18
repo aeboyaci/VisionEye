@@ -110,11 +110,11 @@ router.get("/google/passcode", (req, resp, next) => {
 router.get("/google/passcode/:code", (req, resp, next) => {
   const otp = req.params.code;
   if (!cache.has(otp)) {
-    // TODO redirect to Authentication status webpage (Task-17.1)
-    return resp.status(400).json({
+    req.session.authenticationStatus = {
       success: false,
-      data: "invalid OTP code",
-    });
+      message: "Login failed! Invalid OTP-code given",
+    };
+    return resp.redirect("/status");
   }
   const googleAuthURL = getGoogleAuthURL();
   req.session.otp = otp;
@@ -163,21 +163,22 @@ router.get("/google/callback", async (req, resp, next) => {
 
     const otp: string = req.session.otp ?? "";
     if (!cache.has(otp)) {
-      return resp.redirect("/oauth2/google/callback/failure");
+      req.session.authenticationStatus = {
+        success: false,
+        message: "Login failed! Invalid OTP-code given",
+      };
+      return resp.redirect("/status");
     }
     cache.set(otp, {
       accessToken: tokens.access_token ?? "",
       idToken: tokens.id_token ?? "",
     });
 
-    // TODO redirect to Authentication status webpage (Task-17.1)
-    return resp.status(200).json({
+    req.session.authenticationStatus = {
       success: true,
-      data: {
-        accessToken: tokens.access_token,
-        idToken: tokens.id_token,
-      },
-    });
+      message: "Successfully logged in! You can use your headset to enjoy the Scary Verse",
+    };
+    return resp.redirect("/status");
   } catch (ex) {
     return resp.redirect("/oauth2/google/callback/failure");
   }
@@ -195,16 +196,19 @@ router.get("/google/passcode/:code/status", (req, resp, next) => {
   const tokens = cache.get(otp);
   return resp.status(200).json({
     success: true,
-    tokens: tokens,
+    data: {
+      status: tokens === null ? "WAITING" : "COMPLETED",
+      tokens: tokens,
+    },
   });
 });
 
 router.get("/google/callback/failure", (req, resp, next) => {
-  // TODO redirect to Authentication status webpage (Task-17.1)
-  return resp.status(401).json({
+  req.session.authenticationStatus = {
     success: false,
-    error: "login failed!"
-  });
+    message: "Login failed! Something went wrong with Google, please try again later",
+  };
+  return resp.redirect("/status");
 });
 
 router.get("/google/logout", enforceAuthentication, async (req, resp, next) => {
