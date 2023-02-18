@@ -211,7 +211,7 @@ router.get("/google/logout", enforceAuthentication, async (req, resp, next) => {
   const otp = req.session.otp ?? "";
   cache.delete(otp);
 
-  req.session.destroy((err) => {
+  req.session.destroy(async (err) => {
     if (Boolean(err)) {
       return resp.status(500).json({
         success: false,
@@ -220,7 +220,7 @@ router.get("/google/logout", enforceAuthentication, async (req, resp, next) => {
     }
     const player = req.user!;
 
-    database.player.update({
+    await database.player.update({
       where: {
         id: player.id,
       },
