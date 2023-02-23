@@ -31,4 +31,16 @@ router.get("/", enforceAuthentication, async (req, resp, next) => {
   }
 });
 
+router.get("/me", enforceAuthentication, async (req, resp, next) => {
+  const player = req.user!;
+
+  return resp.status(200).json({
+    success: true,
+    data: {
+      displayName: player.display_name,
+      avatarUrl: player.avatar_url,
+    },
+  });
+});
+
 export default router;

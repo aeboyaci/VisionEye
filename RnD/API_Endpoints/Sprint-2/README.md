@@ -100,8 +100,8 @@
 **GET** `/players`
 
 - Headers:
-  - access_token → ACCESS_TOKEN
-  - id_token → ID_TOKEN
+    - access_token → ACCESS_TOKEN
+    - id_token → ID_TOKEN
 
 - Response:
 
@@ -126,6 +126,27 @@
 **Acceptance Criteria:**
 
 - Get online players from "player" table
+
+**GET** `/players/me`
+
+- Headers:
+    - access_token → ACCESS_TOKEN
+    - id_token → ID_TOKEN
+- Response:
+
+  ```json
+  {
+    "success:": true,
+    "data": {
+      "displayName": "...",
+      "avatarUrl": "..."
+    }
+  }
+  ```
+
+**Acceptance Criteria:**
+
+- Deserialize player using ACCESS_TOKEN and ID_TOKEN, then return the player's information
 
 **POST** `/teams/:teamId/invitations`
 
@@ -534,7 +555,8 @@
 
 **Acceptance Criteria:**
 
-- Deserialize player using ACCESS_TOKEN and ID_TOKEN, and check if the player is the captain of the team with given team id
+- Deserialize player using ACCESS_TOKEN and ID_TOKEN, and check if the player is the captain of the team with given team
+  id
 - Set "ended_at" to "now()" in the "game" table with "gameId" in URL params
 
 **POST** `/achievements`
