@@ -65,6 +65,20 @@
 
         button {
             margin-top: 64px;
+            height: 32px;
+            width: 96px;
+            border-radius: 12px;
+            background-color: #cb2b4a;
+            color: white;
+            border: none;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        button:focus {
+            outline: none;
         }
     </style>
 </head>
@@ -77,22 +91,22 @@
         <div class="otp-group">
             <input onfocus="handleFocus(this)" onkeyup="handleChange(this)" type="text" inputmode="numeric"
                    autocomplete="off"
-                   pattern="[0-9]" maxlength="6" class="otp-input" value="">
+                   pattern="[0-9]" maxlength="1" class="otp-input" value="">
             <input onfocus="handleFocus(this)" onkeyup="handleChange(this)" type="text" inputmode="numeric"
                    autocomplete="off"
-                   pattern="[0-9]" maxlength="6" class="otp-input" value="">
+                   pattern="[0-9]" maxlength="1" class="otp-input" value="">
             <input onfocus="handleFocus(this)" onkeyup="handleChange(this)" type="text" inputmode="numeric"
                    autocomplete="off"
-                   pattern="[0-9]" maxlength="6" class="otp-input" value="">
+                   pattern="[0-9]" maxlength="1" class="otp-input" value="">
             <input onfocus="handleFocus(this)" onkeyup="handleChange(this)" type="text" inputmode="numeric"
                    autocomplete="off"
-                   pattern="[0-9]" maxlength="6" class="otp-input" value="">
+                   pattern="[0-9]" maxlength="1" class="otp-input" value="">
             <input onfocus="handleFocus(this)" onkeyup="handleChange(this)" type="text" inputmode="numeric"
                    autocomplete="off"
-                   pattern="[0-9]" maxlength="6" class="otp-input" value="">
+                   pattern="[0-9]" maxlength="1" class="otp-input" value="">
             <input onfocus="handleFocus(this)" onkeyup="handleChange(this)" type="text" inputmode="numeric"
                    autocomplete="off"
-                   pattern="[0-9]" maxlength="6" class="otp-input" value="">
+                   pattern="[0-9]" maxlength="1" class="otp-input" value="">
         </div>
         <button onclick="handleSubmit(this)">Continue</button>
     </div>
