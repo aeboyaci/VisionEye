@@ -19,7 +19,12 @@ const app = express();
 app.set("trust proxy", true);
 app.set("view engine", "hbs");
 
-app.use(express.static(__dirname + "/public"));
+if (process.env.NODE_ENVIRONMENT !== "PRODUCTION") {
+  app.use(express.static(__dirname + "/public"));
+}
+else {
+  app.use(express.static(__dirname + "/../public"));
+}
 
 app.use(session({
   secret: COOKIE_SECRET,

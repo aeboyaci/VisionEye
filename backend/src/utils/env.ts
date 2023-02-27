@@ -1,12 +1,13 @@
 import dotenv from "dotenv";
 import fs from "fs";
 
-// checking if .env file is available
-if (fs.existsSync(".env")) {
+// checking environment mode
+if (process.env.NODE_ENVIRONMENT !== "PRODUCTION") {
+  if (!fs.existsSync(".env")) {
+    console.error(".env file not found.");
+    process.exit(1);
+  }
   dotenv.config({ path: ".env" });
-} else {
-  console.error(".env file not found.");
-  process.exit(1);
 }
 
 export const PORT = 8080;

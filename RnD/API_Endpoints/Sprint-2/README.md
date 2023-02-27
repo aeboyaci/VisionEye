@@ -455,7 +455,8 @@
     "data": {
       "ipv4": "...",
       "port": 1234,
-      "joinCode": "..."
+      "joinCode": "...",
+      "hasStarted": false
     }
   }
   ```
