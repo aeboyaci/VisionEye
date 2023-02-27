@@ -18,6 +18,7 @@ services:
       context: ./src
       args:
         - NODE_ENVIRONMENT=PRODUCTION
+        - BASE_URL="https://scary-verse.com"
         - DB_URL="postgres://vision_eye:scary_verse@db:5432/bil496"
         - COOKIE_SECRET=82b73c5531ad0a48598631f08d9afef8670a15fc2ef389452adefdd41c52924a
         - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}

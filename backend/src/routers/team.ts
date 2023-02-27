@@ -285,12 +285,20 @@ router.get("/:teamId/relay-server", enforceAuthentication, async (req, resp, nex
       });
     }
 
+    const game = await database.game.findFirst({
+      where: {
+        team_id: teamId,
+        ended_at: null,
+      },
+    });
+
     return resp.status(200).json({
       success: true,
       data: {
         "ipv4": relayServer.ipv4,
         "port": relayServer.port,
-        "joinCode": relayServer.join_code
+        "joinCode": relayServer.join_code,
+        "hasStarted": game === null,
       },
     });
   } catch (ex) {

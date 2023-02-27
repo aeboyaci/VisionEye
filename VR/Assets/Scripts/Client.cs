@@ -16,7 +16,7 @@ public class Response
 
 public class Client
 {
-    private static readonly string API_URL = "http://localhost:8080";
+    private static readonly string API_URL = "https://scary-verse.com";
 
     private static string AccessToken { get; set; }
     private static string IdToken { get; set; }
