@@ -28,6 +28,9 @@ RUN npm install
 # Copy source files
 COPY . ./
 
+# Migrate
+RUN npx prisma migrate dev
+
 # Generate Prisma.Js Client
 RUN npx prisma generate
 
