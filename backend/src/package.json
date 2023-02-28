@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "npx prisma migrate dev && npx prisma generate && node dist/app.js",
     "dev": "nodemon --files app.ts",
     "fillDatabase": "nodemon test/fill_database_with_test_values.ts",
     "build": "npx tsc -p ."
