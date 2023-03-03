@@ -25,17 +25,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39289212195762992}
-  m_LocalRotation: {x: 0.021814894, y: -0, z: -0, w: 0.99976206}
-  m_LocalPosition: {x: 0, y: 0, z: -0.2521205}
-  m_LocalScale: {x: 0.099999994, y: 0.009999998, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.099999994, y: 0.09999998, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8035306817432312411}
-  m_RootOrder: 4
+  m_Father: {fileID: 2399569112637823187}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -52.7, y: -5.774498}
+  m_AnchoredPosition: {x: -52.7, y: 0}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3420137320784217448
@@ -106,7 +106,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: -0.2521205}
   m_LocalScale: {x: 1, y: 0.09999999, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7774575695623293635}
+  - {fileID: 6351329370749787845}
   m_Father: {fileID: 8035306817432312411}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -197,19 +199,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 6312191284192775087}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -220,6 +210,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 7178488723870497769}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1833896286649263705
 GameObject:
@@ -422,7 +424,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: https://scary-verse.me/
+  m_text: https://scary-verse.com/
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -651,18 +653,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4334335737007213081}
-  m_LocalRotation: {x: 0.021814894, y: -0, z: -0, w: 0.99976206}
-  m_LocalPosition: {x: 0, y: 0, z: -0.2521205}
-  m_LocalScale: {x: 1, y: 0.09999999, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8035306817432312411}
-  m_RootOrder: 3
+  m_Father: {fileID: 2399569112637823187}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -5.7744975}
-  m_SizeDelta: {x: -230, y: -5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5771260942258938726
 CanvasRenderer:
@@ -1255,6 +1257,11 @@ PrefabInstance:
 --- !u!4 &452814689129935905 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6919721607305201831, guid: e1032521a626a5145a78f9dc5723172c, type: 3}
+  m_PrefabInstance: {fileID: 7372237199073262726}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7178488723870497769 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 418957748258735983, guid: e1032521a626a5145a78f9dc5723172c, type: 3}
   m_PrefabInstance: {fileID: 7372237199073262726}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &8035306817432312411 stripped
