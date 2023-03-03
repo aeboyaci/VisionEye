@@ -1,8 +1,7 @@
 import { database } from "../prisma/database";
 import { achievement, game, player, room, team } from "@prisma/client";
 
-let mainPlayer: player | null;
-let dummyPlayer: player | null;
+let players: player[];
 let mainTeam: team | null;
 let mainRoom: room | null;
 let mainGame: game | null;
@@ -17,6 +16,7 @@ async function fillDatabaseWithTestingValues(): Promise<void> {
   await addGame();
   await addAchievement();
   await addPlayerHasAchievements();
+  await addScoreboard();
 }
 
 async function addPlayer(): Promise<void> {
@@ -31,22 +31,29 @@ async function addPlayer(): Promise<void> {
         is_online: false,
       },
       {
-        email: "testuser@visioneye.local",
-        display_name: "Test Player",
+        email: "testuser+01@visioneye.local",
+        display_name: "Test Player - 1",
+        avatar_url: "https://lh3.googleusercontent.com/a/AEdFTp4JU0RRYp_brGeMZgEIG3rNFknstRhNvoKIZ_-O=s96-c",
+        is_online: false,
+      },
+      {
+        email: "testuser+02@visioneye.local",
+        display_name: "Test Player - 2",
+        avatar_url: "https://lh3.googleusercontent.com/a/AEdFTp4JU0RRYp_brGeMZgEIG3rNFknstRhNvoKIZ_-O=s96-c",
+        is_online: false,
+      },
+      {
+        email: "testuser+03@visioneye.local",
+        display_name: "Test Player - 3",
         avatar_url: "https://lh3.googleusercontent.com/a/AEdFTp4JU0RRYp_brGeMZgEIG3rNFknstRhNvoKIZ_-O=s96-c",
         is_online: false,
       }
     ],
   });
 
-  mainPlayer = await database.player.findFirst({
-    where: {
-      email: "scaryverse.visioneye@gmail.com",
-    },
-  });
-  dummyPlayer = await database.player.findFirst({
-    where: {
-      email: "testuser@visioneye.local",
+  players = await database.player.findMany({
+    orderBy: {
+      email: "asc",
     },
   });
 
@@ -75,19 +82,22 @@ async function addTeamHasPlayers(): Promise<void> {
       name: "Test Team",
     },
   });
+  const teamPlayers = [
+    {
+      player_id: players[0].id,
+      team_id: team!.id,
+      is_captain: true,
+    }
+  ];
+  for (let i = 1; i < players.length; i++) {
+    teamPlayers.push({
+      player_id: players[i].id,
+      team_id: team!.id,
+      is_captain: false,
+    });
+  }
   await database.team_has_players.createMany({
-    data: [
-      {
-        player_id: mainPlayer!.id,
-        team_id: team!.id,
-        is_captain: true,
-      },
-      {
-        player_id: dummyPlayer!.id,
-        team_id: team!.id,
-        is_captain: false,
-      },
-    ],
+    data: teamPlayers,
   });
 
   console.log("[INFO] team_has_players");
@@ -97,19 +107,17 @@ async function addTeamHasPlayers(): Promise<void> {
 async function addInvitation(): Promise<void> {
   console.log("[DEBUG] invitation");
 
+  const invitations = [];
+  for (let i = 1; i < players.length; i++) {
+    invitations.push({
+      team_id: mainTeam!.id,
+      sender_player_id: players[i - 1].id,
+      receiver_player_id: players[i].id,
+    });
+  }
+
   await database.invitation.createMany({
-    data: [
-      {
-        team_id: mainTeam!.id,
-        sender_player_id: mainPlayer!.id,
-        receiver_player_id: dummyPlayer!.id,
-      },
-      {
-        team_id: mainTeam!.id,
-        sender_player_id: dummyPlayer!.id,
-        receiver_player_id: mainPlayer!.id,
-      },
-    ],
+    data: invitations,
   });
 
   console.log("[INFO] invitation");
@@ -186,19 +194,19 @@ async function addPlayerHasAchievements(): Promise<void> {
   await database.player_has_achievements.createMany({
     data: [
       {
-        player_id: mainPlayer!.id,
+        player_id: players[0].id,
         team_id: mainTeam!.id,
         game_id: mainGame!.id,
         achievement_id: achievements[0].id,
       },
       {
-        player_id: mainPlayer!.id,
+        player_id: players[0].id,
         team_id: mainTeam!.id,
         game_id: mainGame!.id,
         achievement_id: achievements[1].id,
       },
       {
-        player_id: mainPlayer!.id,
+        player_id: players[0].id,
         team_id: mainTeam!.id,
         game_id: mainGame!.id,
         achievement_id: achievements[2].id,
@@ -209,5 +217,22 @@ async function addPlayerHasAchievements(): Promise<void> {
   console.log("[INFO] player_has_achievements");
   return new Promise((resolve) => resolve());
 }
+
+async function addScoreboard(): Promise<void> {
+  console.log("[DEBUG] player_has_achievements");
+
+  for (let i = 0; i < players.length; i++) {
+    await database.scoreboard.create({
+      data: {
+        player_id: players[i].id,
+        score: 0,
+      },
+    });
+  }
+
+  console.log("[INFO] player_has_achievements");
+  return new Promise((resolve) => resolve());
+}
+
 
 fillDatabaseWithTestingValues();
