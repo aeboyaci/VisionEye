@@ -28,6 +28,9 @@ RUN npm install
 # Copy source files
 COPY . ./
 
+# Generate Prisma Client to avoid Typescript compiler errors
+RUN npx prisma generate
+
 # Build API
 RUN npm run build
 
