@@ -29,7 +29,14 @@ public class Client
 
     public static UnityWebRequest PrepareRequest(string method, string endpoint, object body = null)
     {
-        UnityWebRequest request = new UnityWebRequest(API_URL + endpoint);
+        string url = API_URL + endpoint;
+        if (AccessToken != null && IdToken != null)
+        {
+            url += "?access_token=" + AccessToken;
+            url += "&id_token=" + IdToken;
+        }
+
+        UnityWebRequest request = new UnityWebRequest(url);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.method = method;
 
@@ -44,12 +51,6 @@ public class Client
             string json = JsonConvert.SerializeObject(body);
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
             request.uploadHandler = new UploadHandlerRaw(jsonToSend);
-        }
-
-        if (AccessToken != null && IdToken != null)
-        {
-            request.SetRequestHeader("access_token", AccessToken);
-            request.SetRequestHeader("id_token", IdToken);
         }
 
         return request;

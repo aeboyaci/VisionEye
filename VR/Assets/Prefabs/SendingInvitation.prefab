@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 653649233366963756}
   - component: {fileID: 1408555126350194856}
   - component: {fileID: 5904736348324918210}
+  - component: {fileID: 6341812658998211645}
   m_Layer: 5
   m_Name: SendingInvitation
   m_TagString: Untagged
@@ -105,6 +106,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &6341812658998211645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731367465475925150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85df265f5afb9784bad4eed7721db8b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayName: {fileID: 9200985547879095274}
+  inviteButton: {fileID: 3909349102666247506}
 --- !u!1 &6201045901097612273
 GameObject:
   m_ObjectHideFlags: 0
