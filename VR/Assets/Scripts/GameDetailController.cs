@@ -54,7 +54,7 @@ public class GameDetailController : MonoBehaviour
 
     void Start()
     {
-     //    StartCoroutine(Poll_Coroutine());
+       StartCoroutine(Poll_Coroutine());
     }
     
 
@@ -84,37 +84,7 @@ public class GameDetailController : MonoBehaviour
                     int i = 0;
                     foreach (AchievementData ach in statusResponse.achievements)
                     {
-                        GameObject achievemts = achievementsScreen.transform.GetChild(i).gameObject;//ach1-2-3-4
-
-                        for(int y=0;y<4;y++)
-                        {
-                            GameObject childOfChilds = achievemts.transform.GetChild(y).gameObject;
-                            uiText = childOfChilds.GetComponent<TextMeshProUGUI>();
-                            if(y == 0)
-                            {
-                                uiText.text = ach.name;
-                            }
-                            if (y == 1)
-                            {
-                                uiText.text = ach.score;
-                            }
-                            if (y == 2)
-                            {
-                                uiText.text = ach.owner;
-                            }
-                            if (y == 3)
-                            {
-                                uiText.text = ach.description;
-                            }
-                            uiText.text = ach.id;
-                        }
-
-                        i++;
-                        if (i == 4)
-                            break;
-
                     }
-
                     }
                 }
             }
