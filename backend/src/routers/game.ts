@@ -124,7 +124,7 @@ router.get("/:gameId", enforceAuthentication, async (req, resp, next) => {
     const player = req.user!;
     const { gameId } = req.params;
 
-    const result: { values: GameDetailInformation[] } = await database.$queryRaw`
+    const result: { values: GameDetailInformation }[] = await database.$queryRaw`
       WITH
         score_information as (
           SELECT DISTINCT ON (player_id) game_id, sum(score) as score FROM player_has_achievements
@@ -158,7 +158,7 @@ router.get("/:gameId", enforceAuthentication, async (req, resp, next) => {
 
     return resp.status(200).json({
       success: true,
-      data: result,
+      data: result.length === 0 ? null : result[0].values,
     });
   } catch (ex) {
     return resp.status(500).json({
