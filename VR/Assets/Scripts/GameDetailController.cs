@@ -1,95 +1,83 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using TMPro;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 
 class GameDetailsResponse
 {
     [JsonProperty("roomName")]
     public string roomName;
+
     [JsonProperty("minutesPlayed")]
-    public string minutesPlayed;
+    public int minutesPlayed;
+
     [JsonProperty("score")]
-    public string score;
+    public int score;
+
     [JsonProperty("achievements")]
     public AchievementData[] achievements;
 }
+
 class AchievementData
 {
     [JsonProperty("id")]
     public string id;
+
     [JsonProperty("name")]
     public string name;
+
     [JsonProperty("description")]
     public string description;
+
     [JsonProperty("score")]
-    public string score;
+    public int score;
+
     [JsonProperty("owner")]
     public string owner;
-
 }
-
-
-
-
-
 
 public class GameDetailController : MonoBehaviour
 {
-    private TMPro.TMP_Text uiText;
+    public TMPro.TMP_Text displayName;
 
     public TMPro.TMP_Text roomName;
     public TMPro.TMP_Text score;
     public TMPro.TMP_Text completeTime;
 
-
-
-    private string gameId = null;
-    private TextMeshPro UIText;
+    public GameObject achievements;
+    public AchievementRow achievementRowPrefab;
 
     void Start()
     {
-       StartCoroutine(Poll_Coroutine());
+        // TODO read from State
+        displayName.text = "Ahmet Eren";
+
+        StartCoroutine(GetGameDetailInformation_Coroutine());
     }
     
-
-    
-    IEnumerator Poll_Coroutine()
+    IEnumerator GetGameDetailInformation_Coroutine()
     {
-        while (true)
+        // TODO read game id from State
+        UnityWebRequest request = Client.PrepareRequest("GET", $"/games/5a399cc4-1699-41f9-bc43-3716f31842ca");
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            
-            if (gameId != null)
+            Response response = Client.GetResponseValue(request);
+            GameDetailsResponse statusResponse = JsonConvert.DeserializeObject<GameDetailsResponse>(response.data.ToString());
+
+            roomName.text = statusResponse.roomName;
+            score.text = statusResponse.score.ToString();
+            completeTime.text = statusResponse.minutesPlayed.ToString();
+
+            foreach (AchievementData ach in statusResponse.achievements)
             {
-                UnityWebRequest request = Client.PrepareRequest("GET", $"/games/{gameId}");
-                yield return request.SendWebRequest();
-
-                if (request.result == UnityWebRequest.Result.Success)
-                {
-                    Response response = Client.GetResponseValue(request);
-                    GameDetailsResponse statusResponse = JsonConvert.DeserializeObject<GameDetailsResponse>(response.data.ToString());
-
-
-                    roomName.text = statusResponse.roomName;
-                    score.text = statusResponse.score;
-                    completeTime.text = statusResponse.minutesPlayed; 
-
-
-                    GameObject achievementsScreen = GameObject.Find("Achievements");
-                    int i = 0;
-                    foreach (AchievementData ach in statusResponse.achievements)
-                    {
-                    }
-                    }
-                }
+                AchievementRow row = Instantiate(achievementRowPrefab, achievements.transform).GetComponent<AchievementRow>();
+                row.name.text = ach.name;
+                row.score.text = ach.score.ToString();
+                row.owner.text = ach.owner;
+                row.description.text = ach.description;
             }
-
-            yield return new WaitForSeconds(1.0f);
         }
     }
-
+}
