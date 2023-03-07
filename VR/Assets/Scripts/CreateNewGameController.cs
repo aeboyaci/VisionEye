@@ -38,8 +38,24 @@ public class TeamInvitationResponse
     public string status;
 }
 
+public class RelayServerResponse
+{
+    [JsonProperty("ipv4")]
+    public string ipv4;
+
+    [JsonProperty("port")]
+    public int port;
+
+    [JsonProperty("joinCode")]
+    public string joinCode;
+
+    [JsonProperty("hasStarted")]
+    public bool hasStarted;
+}
+
 public class CreateNewGameController : MonoBehaviour
 {
+    public TMPro.TMP_Text displayName;
     public TMPro.TMP_Text numberOfPlayersText;
     public Button randomButton;
     public TMPro.TMP_InputField teamNameInputField;
@@ -56,6 +72,8 @@ public class CreateNewGameController : MonoBehaviour
     {
         teamPlayers = new List<TeamPlayer>();
 
+        displayName.text = State.DisplayName;
+
         numberOfPlayersText.text = "Players (1/4)";
         TeamPlayer me = new TeamPlayer { DisplayName = State.DisplayName, AvatarUrl = State.AvatarUrl };
         teamPlayers.Add(me);
@@ -69,6 +87,7 @@ public class CreateNewGameController : MonoBehaviour
 
         randomButton.onClick.AddListener(randomButtonOnClick);
 
+        StartCoroutine(PollRelayServerInformation_Coroutine());
         StartCoroutine(GetOnlinePlayers_Coroutine());
         StartCoroutine(GetTeamPlayers_Coroutine());
     }
@@ -108,7 +127,29 @@ public class CreateNewGameController : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
+            // TODO go back to Home Screen
+        }
+    }
 
+    IEnumerator PollRelayServerInformation_Coroutine()
+    {
+        while (true)
+        {
+            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/relay-server");
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Response response = Client.GetResponseValue(request);
+                RelayServerResponse relayServer = JsonConvert.DeserializeObject<RelayServerResponse>(response.data.ToString());
+
+                if (relayServer.hasStarted)
+                {
+                    // TODO connect to the captain's relay-server
+                }
+            }
+
+            yield return new WaitForSeconds(1.0f);
         }
     }
 
