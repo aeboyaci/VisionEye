@@ -65,7 +65,7 @@ async function getGoogleUser(idToken: string, accessToken: string): Promise<Goog
 
 export async function enforceAuthentication(req: Request, resp: Response, next: NextFunction) {
   try {
-    const { id_token, access_token } = req.query as unknown as { id_token: string; access_token: string; };
+    const { id_token, access_token } = req.query as unknown as { access_token: string; id_token: string; };
 
     const googleUser = await getGoogleUser(id_token, access_token);
     const player = await database.player.findFirst({
@@ -148,8 +148,7 @@ router.get("/google/callback", async (req, resp, next) => {
           },
         },
       });
-    }
-    else {
+    } else {
       await database.player.update({
         where: {
           id: player.id,
