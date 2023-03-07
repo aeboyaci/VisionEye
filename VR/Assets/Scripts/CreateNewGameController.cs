@@ -68,9 +68,15 @@ public class CreateNewGameController : MonoBehaviour
 
     private List<TeamPlayer> teamPlayers;
 
+    private HashSet<string> teamPlayerIds;
+    private HashSet<string> onlinePlayerIds;
+
     void Start()
     {
         teamPlayers = new List<TeamPlayer>();
+
+        teamPlayerIds = new HashSet<string>();
+        onlinePlayerIds = new HashSet<string>();
 
         displayName.text = State.DisplayName;
 
@@ -168,6 +174,13 @@ public class CreateNewGameController : MonoBehaviour
                 for (int i = 0; i < onlinePlayers.Length; i++)
                 {
                     Player player = onlinePlayers[i];
+                    if (player.playerId.Equals(State.PlayerId) || onlinePlayerIds.Contains(player.playerId))
+                    {
+                        continue;
+                    }
+
+                    onlinePlayerIds.Add(player.playerId);
+
                     SendingInvitation invitation = Instantiate(sendingInvitationPrefab, onlinePlayersGrid.transform).GetComponent<SendingInvitation>();
                     invitation.playerId = player.playerId;
                     invitation.displayName.text = player.displayName;
@@ -198,8 +211,10 @@ public class CreateNewGameController : MonoBehaviour
                         continue;
                     }
 
-                    if (invitation.status.Equals("ACCEPTED"))
+                    if (invitation.status.Equals("ACCEPTED") && !teamPlayerIds.Contains(invitation.playerId))
                     {
+                        teamPlayerIds.Add(invitation.playerId);
+
                         if (teamPlayers.Count < 5)
                         {
                             TeamPlayer teamPlayer = new TeamPlayer { DisplayName = invitation.displayName, AvatarUrl = invitation.avatarUrl };
