@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7688807636503232991}
   - component: {fileID: 4724934121049481991}
   m_Layer: 5
-  m_Name: Player
+  m_Name: TeamDetailPlayerCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4239199741529204424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12b1841984f8d4810baf7e4219fe02b9, type: 3}
+  m_Script: {fileID: 11500000, guid: f13c00cf5b35f480494d4788c995b0d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: {fileID: 5148671843135802330}

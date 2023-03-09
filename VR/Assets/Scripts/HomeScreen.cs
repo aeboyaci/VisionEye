@@ -2,9 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -25,9 +22,9 @@ class PastTeamResponse {
 
 class Me {
     [JsonProperty("displayName")]
-    public static string displayName;
+    public string displayName;
     [JsonProperty("avatarUrl")]
-    public static string avatarUrl;
+    public string avatarUrl;
 }
 class InvitationResponse {
 
@@ -49,8 +46,6 @@ class Player {
     public bool isCaptain;
     [JsonProperty("isOnline")]
     public bool isOnline;
-
-
 }
 
 class Sender {
@@ -123,8 +118,6 @@ public class HomeScreen : MonoBehaviour
         }
     }
 
-    
-
     IEnumerator GetMyInfo_Coroutine()
     {
 
@@ -135,10 +128,7 @@ public class HomeScreen : MonoBehaviour
 
             Response response = Client.GetResponseValue(request);
             Me myself = JsonConvert.DeserializeObject<Me>(response.data.ToString());
-            screenDisplayName.text = Me.displayName;
-            //since the class is static, there might be a problem
-            //name and avatar will be taken from here.
-            
+            State.DisplayName = myself.displayName;
         }
         else Debug.Log(request.result);
 
@@ -194,16 +184,12 @@ public class HomeScreen : MonoBehaviour
         }
 
     }
+
     void Start()
     {
         createNewGameButton.onClick.AddListener(OnCreateNewGameButtonClick);
+        StartCoroutine(GetMyInfo_Coroutine());
         StartCoroutine(GetPastTeams_Coroutine());
         StartCoroutine(GetInvitations_Coroutine());
     }
-
-   
 }
-
-
-    
-

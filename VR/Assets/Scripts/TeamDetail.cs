@@ -1,13 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 class Game {
 
@@ -21,8 +16,9 @@ class Game {
     public string startDate;
 }
 
-
 class TeamResponse {
+    [JsonProperty("id")]
+    public string id;
     [JsonProperty("name")]
     public string name;
     [JsonProperty("games")]
@@ -36,14 +32,18 @@ public class TeamDetail : MonoBehaviour
 {
     public TMPro.TMP_Text teamDisplayName;
     public PastGame pastgame;
-    public TeamPlayer teamPlayer;
+    public TeamDetailPlayerCard teamPlayer;
     public GameObject gameContainer;
     public GameObject playerContainer;
 
+    void Start()
+    {
+        StartCoroutine(GetGamesAndPlayers_Coroutine());
+    }
+
     IEnumerator GetGamesAndPlayers_Coroutine()
     {
-        string teamId = "testID";//State.ActiveTeamId;
-        UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{teamId}");
+        UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}");
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {
@@ -69,17 +69,13 @@ public class TeamDetail : MonoBehaviour
                 Player player = teamPlayers[i];
                 if (teamPlayer != null)
                 {
-                    var row = Instantiate(teamPlayer, playerContainer.transform).GetComponent<TeamPlayer>();
-                    row.playerName.text = player.displayName; 
+                    TeamDetailPlayerCard row = Instantiate(teamPlayer, playerContainer.transform).GetComponent<TeamDetailPlayerCard>();
+                    row.playerName.text = player.displayName;
                 }
-
             }
 
         }
         else Debug.Log(request.result);
 
     }
-
 }
-
-    
