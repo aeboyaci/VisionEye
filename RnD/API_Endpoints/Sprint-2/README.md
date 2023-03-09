@@ -442,6 +442,25 @@
 - join "achievement" table with (4) ON (4).achievement_id/achievement.id → (6)
 - Aggregate the values to sum achievement scores, and calculate game durations (game.end_date - game.start_date)
 
+**GET** `/teams/:teamId/delete`
+
+- Headers:
+  - access_token → ACCESS_TOKEN
+  - id_token → ID_TOKEN
+- Response:
+
+  ```json
+  {
+    "success": true,
+    "data": "team deleted successfully"
+  }
+  ```
+
+**Acceptance Criteria:**
+
+- Check if the deserialized player is the captain of the team
+- Delete the team if any game has already started yet
+
 **GET** `/teams/:teamId/relay-server`
 
 - Headers:
