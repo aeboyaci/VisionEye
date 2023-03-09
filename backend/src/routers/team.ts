@@ -1,7 +1,6 @@
 import express from "express";
 import { database } from "../prisma/database";
 import { enforceAuthentication } from "./authentication";
-import {team} from "@prisma/client";
 
 type PlayerInformation = {
   isMember: boolean;
