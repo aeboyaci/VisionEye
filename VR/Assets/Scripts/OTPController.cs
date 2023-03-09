@@ -70,12 +70,7 @@ public class OTPController : MonoBehaviour
                     {
                         Client.SetTokens(statusResponse.tokens.accessToken, statusResponse.tokens.idToken);
 
-                        Debug.Log(statusResponse.status);
-                        Debug.Log(statusResponse.tokens.accessToken);
-                        Debug.Log(statusResponse.tokens.idToken);
-
                         GameObject homeScreen = GameObject.Find("HomeScreen");
-                        Debug.Log(homeScreen);
                         gameObject.SetActive(false);
                         homeScreen.transform.GetChild(0).gameObject.SetActive(true);
                     }

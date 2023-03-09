@@ -30,6 +30,7 @@ class TeamResponse {
 
 public class TeamDetail : MonoBehaviour
 {
+    public TMPro.TMP_Text displayName;
     public TMPro.TMP_Text teamDisplayName;
     public PastGame pastgame;
     public TeamDetailPlayerCard teamPlayer;
@@ -38,6 +39,8 @@ public class TeamDetail : MonoBehaviour
 
     void Start()
     {
+        displayName.text = State.DisplayName;
+
         StartCoroutine(GetGamesAndPlayers_Coroutine());
     }
 

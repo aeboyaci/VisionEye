@@ -12,16 +12,19 @@ public class PastTeam : MonoBehaviour
     public TMPro.TMP_Text minutesPlayed;
     public Button teamDetailButton;
 
-    /*void Start()
+    void Start()
     {
-        // Attach the OnButtonClick function to the create button's onClick event
         teamDetailButton.onClick.AddListener(OnTeamDetailButtonClick);
     }
 
     private void OnTeamDetailButtonClick()
     {
-        StartCoroutine(MyCoroutine());
+        State.ActiveTeamId = id;
+
+        GameObject teamDetailScreen = GameObject.Find("TeamDetailScreen");
+        GameObject homeScreen = GameObject.Find("HomeScreen");
+
+        homeScreen.transform.GetChild(0).gameObject.SetActive(false);
+        teamDetailScreen.transform.GetChild(0).gameObject.SetActive(true);
     }
-    */
-   
 }

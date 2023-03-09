@@ -37,6 +37,7 @@ router.get("/me", enforceAuthentication, async (req, resp, next) => {
   return resp.status(200).json({
     success: true,
     data: {
+      id: player.id,
       displayName: player.display_name,
       avatarUrl: player.avatar_url,
     },

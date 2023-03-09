@@ -21,6 +21,8 @@ class PastTeamResponse {
 }
 
 class Me {
+    [JsonProperty("id")]
+    public string id;
     [JsonProperty("displayName")]
     public string displayName;
     [JsonProperty("avatarUrl")]
@@ -79,7 +81,6 @@ public class HomeScreen : MonoBehaviour
     public PastTeam pastTeam;
     public Invitation invitationObj;
 
-
     public TMPro.TMP_Text screenDisplayName;
     public Button createNewGameButton;
     public GameObject teamContainer;
@@ -125,9 +126,9 @@ public class HomeScreen : MonoBehaviour
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {
-
             Response response = Client.GetResponseValue(request);
             Me myself = JsonConvert.DeserializeObject<Me>(response.data.ToString());
+            State.PlayerId = myself.id;
             State.DisplayName = myself.displayName;
         }
         else Debug.Log(request.result);
@@ -145,6 +146,8 @@ public class HomeScreen : MonoBehaviour
 
             if (createTeamResponse.success == true)
             {
+                State.ActiveTeamId = createTeamResponse.teamId;
+
                 GameObject createNewGameScreen = GameObject.Find("CreateNewGameScreen");
                 gameObject.SetActive(false);
                 createNewGameScreen.transform.GetChild(0).gameObject.SetActive(true);
