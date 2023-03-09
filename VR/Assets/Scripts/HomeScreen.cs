@@ -24,8 +24,10 @@ class PastTeamResponse {
 }
 
 class Me {
-    static string displayName;
-    static string avatarUrl;
+    [JsonProperty("displayName")]
+    public static string displayName;
+    [JsonProperty("avatarUrl")]
+    public static string avatarUrl;
 }
 class InvitationResponse {
 
@@ -45,6 +47,9 @@ class Player {
     public string avatarUrl;
     [JsonProperty("isCaptain")]
     public bool isCaptain;
+    [JsonProperty("isOnline")]
+    public bool isOnline;
+
 
 }
 
@@ -78,12 +83,12 @@ public class HomeScreen : MonoBehaviour
 {
     public PastTeam pastTeam;
     public Invitation invitationObj;
-    Me myself;
 
 
-
+    public TMPro.TMP_Text screenDisplayName;
     public Button createNewGameButton;
     public GameObject teamContainer;
+    public GameObject invitationContainer;
 
     private void OnCreateNewGameButtonClick()
     {
@@ -92,13 +97,15 @@ public class HomeScreen : MonoBehaviour
 
     IEnumerator GetPastTeams_Coroutine()
     {
+      
         UnityWebRequest request = Client.PrepareRequest("GET", "/teams");
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {
-
+            
             Response response = Client.GetResponseValue(request);
             List<PastTeamResponse> teams = JsonConvert.DeserializeObject<List<PastTeamResponse>>(response.data.ToString());
+            Debug.Log(teams.Count);
             for (int i = 0; i < teams.Count; i++)
             {
                 PastTeamResponse team = teams[i];
@@ -114,22 +121,6 @@ public class HomeScreen : MonoBehaviour
                 }
             }
         }
-        /*else {
-            for (int i = 0; i < 2; i++)
-            {
-                if (pastTeam != null)
-                {
-
-                    var row = Instantiate(pastTeam, teamContainer.transform).GetComponent<PastTeam>();
-                    row.name.text = "team.name";
-                    row.totalScoreGained.text = "aloscore";
-                    row.minutesPlayed.text = "alominute";
-                    row.id = "idit";
-
-                }
-            }
-
-        }*/
     }
 
     
@@ -143,7 +134,9 @@ public class HomeScreen : MonoBehaviour
         {
 
             Response response = Client.GetResponseValue(request);
-            myself = JsonConvert.DeserializeObject<Me>(response.data.ToString());
+            Me myself = JsonConvert.DeserializeObject<Me>(response.data.ToString());
+            screenDisplayName.text = Me.displayName;
+            //since the class is static, there might be a problem
             //name and avatar will be taken from here.
             
         }
@@ -174,34 +167,38 @@ public class HomeScreen : MonoBehaviour
     }
 
     IEnumerator GetInvitations_Coroutine() {
-
-        UnityWebRequest request = Client.PrepareRequest("GET", "/invitations");
-        yield return request.SendWebRequest();
-        if (request.result == UnityWebRequest.Result.Success)
+        while (true)
         {
-            Response response = Client.GetResponseValue(request);
-            List<InvitationResponse> invitations = JsonConvert.DeserializeObject<List<InvitationResponse>>(response.data.ToString());
-
-            for (int i = 0; i < invitations.Count; i++)
+            UnityWebRequest request = Client.PrepareRequest("GET", "/invitations");
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                InvitationResponse invitation = invitations[i];
-                if (invitationObj != null)
+                Response response = Client.GetResponseValue(request);
+                List<InvitationResponse> invitations = JsonConvert.DeserializeObject<List<InvitationResponse>>(response.data.ToString());
+
+                for (int i = 0; i < invitations.Count; i++)
                 {
-                    var row = Instantiate(invitationObj, transform).GetComponent<Invitation>();
-                    row.teamName.text = invitation.teamName;
-                    row.sender.text = invitation.sender;
-                    
+                    InvitationResponse invitation = invitations[i];
+                    if (invitationObj != null)
+                    {
+                        var row = Instantiate(invitationObj, invitationContainer.transform).GetComponent<Invitation>();
+                        row.teamName.text = invitation.teamName;
+                        row.sender.text = invitation.sender;
+
+                    }
                 }
             }
+            else Debug.Log(request.result);
+
+            yield return new WaitForSeconds(1.0f);
         }
 
     }
     void Start()
     {
-        //createNewGameButton.onClick.AddListener(OnCreateNewGameButtonClick);
+        createNewGameButton.onClick.AddListener(OnCreateNewGameButtonClick);
         StartCoroutine(GetPastTeams_Coroutine());
-        //StartCoroutine(CreateNewGame_Coroutine());
-        //StartCoroutine(GetInvitations_Coroutine());
+        StartCoroutine(GetInvitations_Coroutine());
     }
 
    
