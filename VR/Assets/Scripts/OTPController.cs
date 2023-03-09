@@ -75,6 +75,7 @@ public class OTPController : MonoBehaviour
                         Debug.Log(statusResponse.tokens.idToken);
 
                         GameObject homeScreen = GameObject.Find("HomeScreen");
+                        Debug.Log(homeScreen);
                         gameObject.SetActive(false);
                         homeScreen.transform.GetChild(0).gameObject.SetActive(true);
                     }

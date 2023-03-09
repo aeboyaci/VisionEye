@@ -11,18 +11,6 @@ public class TeamPlayer
     public string AvatarUrl { get; set; }
 }
 
-public class Player
-{
-    [JsonProperty("playerId")]
-    public string playerId;
-
-    [JsonProperty("displayName")]
-    public string displayName;
-
-    [JsonProperty("avatarUrl")]
-    public string avatarUrl;
-}
-
 public class TeamInvitationResponse
 {
     [JsonProperty("playerId")]
