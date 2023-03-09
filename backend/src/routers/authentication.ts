@@ -65,10 +65,9 @@ async function getGoogleUser(idToken: string, accessToken: string): Promise<Goog
 
 export async function enforceAuthentication(req: Request, resp: Response, next: NextFunction) {
   try {
-    const idToken = (req.headers["id_token"] || "") as string;
-    const accessToken = (req.headers["access_token"] || "") as string;
+    const { id_token, access_token } = req.query as unknown as { access_token: string; id_token: string; };
 
-    const googleUser = await getGoogleUser(idToken, accessToken);
+    const googleUser = await getGoogleUser(id_token, access_token);
     const player = await database.player.findFirst({
       where: {
         email: googleUser.email,
@@ -149,8 +148,7 @@ router.get("/google/callback", async (req, resp, next) => {
           },
         },
       });
-    }
-    else {
+    } else {
       await database.player.update({
         where: {
           id: player.id,

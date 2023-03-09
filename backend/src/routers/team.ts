@@ -1,6 +1,7 @@
 import express from "express";
 import { database } from "../prisma/database";
 import { enforceAuthentication } from "./authentication";
+import {team} from "@prisma/client";
 
 type PlayerInformation = {
   isMember: boolean;
@@ -254,6 +255,37 @@ router.get("/:teamId", enforceAuthentication, async (req, resp, next) => {
   }
 });
 
+router.get("/:teamId/delete", enforceAuthentication, async (req, resp, next) => {
+  const player = req.user!;
+  const { teamId } = req.params;
+
+  try {
+    const { isCaptain } = await checkIfThePlayerIsAMember(teamId, player.id);
+    if (!isCaptain) {
+      return resp.status(401).json({
+        success: false,
+        error: "You are not allowed to this operation",
+      });
+    }
+
+    await database.team.delete({
+      where: {
+        id: teamId,
+      }
+    });
+
+    return resp.status(200).json({
+      success: true,
+      data: "team deleted successfully",
+    });
+  } catch (ex) {
+    return resp.status(500).json({
+      success: false,
+      error: ex,
+    });
+  }
+});
+
 router.get("/:teamId/relay-server", enforceAuthentication, async (req, resp, next) => {
   const player = req.user!;
   const { teamId } = req.params;
@@ -279,9 +311,14 @@ router.get("/:teamId/relay-server", enforceAuthentication, async (req, resp, nex
       },
     });
     if (relayServer === null) {
-      return resp.status(400).json({
-        success: false,
-        error: "bad request",
+      return resp.status(200).json({
+        success: true,
+        data: {
+          "ipv4": "",
+          "port": 0,
+          "joinCode": "",
+          "hasStarted": false,
+        },
       });
     }
 
@@ -298,7 +335,7 @@ router.get("/:teamId/relay-server", enforceAuthentication, async (req, resp, nex
         "ipv4": relayServer.ipv4,
         "port": relayServer.port,
         "joinCode": relayServer.join_code,
-        "hasStarted": game === null,
+        "hasStarted": game !== null,
       },
     });
   } catch (ex) {
