@@ -130,6 +130,7 @@ public class HomeScreen : MonoBehaviour
             Me myself = JsonConvert.DeserializeObject<Me>(response.data.ToString());
             State.PlayerId = myself.id;
             State.DisplayName = myself.displayName;
+            screenDisplayName.text = State.DisplayName;
         }
         else Debug.Log(request.result);
 
