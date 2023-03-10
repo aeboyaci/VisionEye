@@ -52,7 +52,7 @@ public class TeamDetail : MonoBehaviour
         {
             Response response = Client.GetResponseValue(request);
             TeamResponse teamResponse = JsonConvert.DeserializeObject<TeamResponse>(response.data.ToString());
-            teamDisplayName.text = name;
+            teamDisplayName.text = teamResponse.name;
             List<Game> pastGames = teamResponse.games;
             List<Player> teamPlayers = teamResponse.players;
             for (int i = 0; i < pastGames.Count; i++)

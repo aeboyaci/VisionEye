@@ -50,6 +50,7 @@ public class CreateNewGameController : MonoBehaviour
     public Image onlinePlayersGrid;
     public Image teamPlayersGrid;
     public Button nextButton;
+    public Button goBackButton;
 
     public SendingInvitation sendingInvitationPrefab;
     public TeamPlayerCard teamPlayerCardPrefab;
@@ -80,6 +81,7 @@ public class CreateNewGameController : MonoBehaviour
         }
 
         randomButton.onClick.AddListener(randomButtonOnClick);
+        goBackButton.onClick.AddListener(goBackButtonOnClick);
 
         StartCoroutine(PollRelayServerInformation_Coroutine());
         StartCoroutine(GetOnlinePlayers_Coroutine());
@@ -121,7 +123,9 @@ public class CreateNewGameController : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            // TODO go back to Home Screen
+            GameObject homeScreen = GameObject.Find("HomeScreen");
+            gameObject.SetActive(false);
+            homeScreen.transform.GetChild(0).gameObject.SetActive(true);
         }
     }
 

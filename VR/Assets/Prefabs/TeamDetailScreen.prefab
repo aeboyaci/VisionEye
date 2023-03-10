@@ -804,6 +804,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7734307248210489297}
+  - component: {fileID: 4530994250324800851}
   m_Layer: 0
   m_Name: Entry
   m_TagString: Untagged
@@ -827,6 +828,24 @@ Transform:
   m_Father: {fileID: 6245160378967220759}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4530994250324800851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3937473536629679790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea8553b5879cd4393a8f2b1696877e32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayName: {fileID: 3309847999307662506}
+  teamDisplayName: {fileID: 1997096079856086005}
+  pastgame: {fileID: 2657194777403692600, guid: 66d16bf3eb6e845e48d1bd98b1a596e5, type: 3}
+  teamPlayer: {fileID: 4546828637247935945, guid: 6d13b6cbe23fe4e0fa3cb07f61924254, type: 3}
+  gameContainer: {fileID: 1619786912037929473}
+  playerContainer: {fileID: 5298057550452307865}
 --- !u!1 &4782141749766045478
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,7 +859,6 @@ GameObject:
   - component: {fileID: 433159846246635430}
   - component: {fileID: 1611481080378351451}
   - component: {fileID: 4576132504695473013}
-  - component: {fileID: 8993806871941132148}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -960,24 +978,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
---- !u!114 &8993806871941132148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4782141749766045478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea8553b5879cd4393a8f2b1696877e32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  displayName: {fileID: 3309847999307662506}
-  teamDisplayName: {fileID: 1997096079856086005}
-  pastgame: {fileID: 2657194777403692600, guid: 66d16bf3eb6e845e48d1bd98b1a596e5, type: 3}
-  teamPlayer: {fileID: 4546828637247935945, guid: 6d13b6cbe23fe4e0fa3cb07f61924254, type: 3}
-  gameContainer: {fileID: 1619786912037929473}
-  playerContainer: {fileID: 5298057550452307865}
 --- !u!1 &5113310995803110041
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,7 +1105,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0

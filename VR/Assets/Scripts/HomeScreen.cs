@@ -62,8 +62,6 @@ class Sender {
 }
 class CreateTeamResponse
 {
-    [JsonProperty("success")]
-    public bool success;
     [JsonProperty("teamId")]
     public string teamId;
 }
@@ -140,24 +138,18 @@ public class HomeScreen : MonoBehaviour
     {
         UnityWebRequest request = Client.PrepareRequest("GET", "/teams/create");
         yield return request.SendWebRequest();
+
         if (request.result == UnityWebRequest.Result.Success)
         {
             Response response = Client.GetResponseValue(request);
             CreateTeamResponse createTeamResponse = JsonConvert.DeserializeObject<CreateTeamResponse>(response.data.ToString());
 
-            if (createTeamResponse.success == true)
-            {
-                State.ActiveTeamId = createTeamResponse.teamId;
+            State.ActiveTeamId = createTeamResponse.teamId;
 
-                GameObject createNewGameScreen = GameObject.Find("CreateNewGameScreen");
-                gameObject.SetActive(false);
-                createNewGameScreen.transform.GetChild(0).gameObject.SetActive(true);
-            }
-            else {
-                throw new Exception("New Game could not be created!");
-            }
+            GameObject createNewGameScreen = GameObject.Find("CreateNewGameScreen");
+            gameObject.SetActive(false);
+            createNewGameScreen.transform.GetChild(0).gameObject.SetActive(true);
         }
-
     }
 
     IEnumerator GetInvitations_Coroutine() {
