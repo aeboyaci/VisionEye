@@ -59,20 +59,14 @@ model team_has_players {
 }
 
 model invitation {
-  id                 String            @id @default(uuid())
-  sender             player            @relation(name: "invitation_sender", fields: [sender_player_id], references: [id], onDelete: Cascade)
+  id                 String @id @default(uuid())
+  sender             player @relation(name: "invitation_sender", fields: [sender_player_id], references: [id], onDelete: Cascade)
   sender_player_id   String
-  receiver           player            @relation(name: "invitation_receiver", fields: [receiver_player_id], references: [id], onDelete: Cascade)
+  receiver           player @relation(name: "invitation_receiver", fields: [receiver_player_id], references: [id], onDelete: Cascade)
   receiver_player_id String
-  status             invitation_status @default(PENDING)
-  team               team              @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  status             String @default("PENDING")
+  team               team   @relation(fields: [team_id], references: [id], onDelete: Cascade)
   team_id            String
-}
-
-enum invitation_status {
-  PENDING
-  ACCEPTED
-  REJECTED
 }
 
 model room {

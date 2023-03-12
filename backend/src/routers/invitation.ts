@@ -1,4 +1,3 @@
-import { invitation_status } from "@prisma/client";
 import express from "express";
 import { database } from "../prisma/database";
 import { enforceAuthentication } from "./authentication";
@@ -78,7 +77,7 @@ router.post("/", enforceAuthentication, async (req, resp, next) => {
     const { id, status } = req.body;
 
     // Validate request body
-    if (status !== invitation_status.ACCEPTED || status !== invitation_status.REJECTED) {
+    if (status !== "ACCEPTED" || status !== "REJECTED") {
       return resp.status(400).json({
         success: false,
         error: "invalid request body",
@@ -114,7 +113,7 @@ router.post("/", enforceAuthentication, async (req, resp, next) => {
         where: {
           AND: [
             {
-              status: invitation_status.PENDING,
+              status: "PENDING",
             },
             {
               receiver_player_id: player.id,
@@ -122,7 +121,7 @@ router.post("/", enforceAuthentication, async (req, resp, next) => {
           ],
         },
         data: {
-          status: invitation_status.REJECTED,
+          status: "REJECTED",
         },
       });
     });
