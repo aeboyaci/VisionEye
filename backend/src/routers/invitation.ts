@@ -77,7 +77,7 @@ router.post("/", enforceAuthentication, async (req, resp, next) => {
     const { id, status } = req.body;
 
     // Validate request body
-    if (status !== "ACCEPTED" || status !== "REJECTED") {
+    if (status !== "ACCEPTED" && status !== "REJECTED") {
       return resp.status(400).json({
         success: false,
         error: "invalid request body",
