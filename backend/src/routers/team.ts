@@ -221,6 +221,7 @@ router.get("/:teamId", enforceAuthentication, async (req, resp, next) => {
       SELECT team."name",
              json_agg(
                  distinct jsonb_build_object(
+                     'id', game_information.id,
                      'roomName', game_information.room_name,
                      'minutesPlayed', extract(MINUTE FROM AGE(game_information.ended_at, game_information.started_at)),
                      'score', game_information.score,
