@@ -225,28 +225,27 @@
     "success": true,
     "data": [
       {
+        "id": "...",
+        "teamId": "...",
         "sender": {
           "playerId": "...",
           "displayName": "...",
           "avatarUrl": "..."
         },
-        "team": {
-          "name": "...",
-          "players": [
-            {
-              "playerId": "...",
-              "displayName": "...",
-              "avatarUrl": "...",
-              "isCaptain": true
-            },
-            {
-              "playerId": "...",
-              "displayName": "...",
-              "avatarUrl": "...",
-              "isCaptain": false
-            }
-          ]
-        }
+        "players": [
+          {
+            "playerId": "...",
+            "displayName": "...",
+            "avatarUrl": "...",
+            "isCaptain": true
+          },
+          {
+            "playerId": "...",
+            "displayName": "...",
+            "avatarUrl": "...",
+            "isCaptain": false
+          }
+        ]
       }
     ]
   }

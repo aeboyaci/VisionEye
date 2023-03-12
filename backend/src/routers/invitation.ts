@@ -39,7 +39,7 @@ router.get("/", enforceAuthentication, async (req, resp, next) => {
                           invitation.receiver_player_id = ${player.id}
           )
       SELECT sender_player.invitation_id as id,
-             team.name as "name",
+             team.id as "teamId",
              json_build_object(
                      'playerId', sender_player.player_id,
                      'displayName', sender_player.display_name,
