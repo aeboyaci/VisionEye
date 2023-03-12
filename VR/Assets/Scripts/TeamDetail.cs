@@ -14,6 +14,8 @@ class Game {
     public string minutesPlayed;
     [JsonProperty("startDate")]
     public string startDate;
+    [JsonProperty("id")]
+    public string id;
 }
 
 class TeamResponse {
@@ -65,6 +67,7 @@ public class TeamDetail : MonoBehaviour
                     row.score.text = game.score;
                     row.minutes.text = game.minutesPlayed;
                     row.date.text = game.startDate;
+                    row.id = game.id;
                 }
             }
 

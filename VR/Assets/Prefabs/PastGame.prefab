@@ -510,10 +510,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b28098cb39b94bc5bf6210ca02cbe2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 
   roomname: {fileID: 2657194777642136920}
   score: {fileID: 2657194778067220275}
   minutes: {fileID: 2657194776245368503}
   date: {fileID: 2657194776046682544}
+  gameDetailButton: {fileID: 8959982901116364794}
 --- !u!1 &2657194777642136926
 GameObject:
   m_ObjectHideFlags: 0

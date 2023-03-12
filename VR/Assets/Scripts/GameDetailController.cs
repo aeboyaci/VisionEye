@@ -49,16 +49,16 @@ public class GameDetailController : MonoBehaviour
 
     void Start()
     {
-        // TODO read from State
-        displayName.text = "Ahmet Eren";
+        
+        displayName.text = State.DisplayName;
 
         StartCoroutine(GetGameDetailInformation_Coroutine());
     }
     
     IEnumerator GetGameDetailInformation_Coroutine()
     {
-        // TODO read game id from State
-        UnityWebRequest request = Client.PrepareRequest("GET", $"/games/5a399cc4-1699-41f9-bc43-3716f31842ca");
+        
+        UnityWebRequest request = Client.PrepareRequest("GET", $"/games/{State.ActiveGameId}");
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
