@@ -58,14 +58,14 @@ public class CreateNewGameController : MonoBehaviour
     private List<TeamPlayer> teamPlayers;
 
     private HashSet<string> teamPlayerIds;
-    private HashSet<string> onlinePlayerIds;
+    private Dictionary<string, SendingInvitation> onlinePlayersMap;
 
     void Start()
     {
         teamPlayers = new List<TeamPlayer>();
 
         teamPlayerIds = new HashSet<string>();
-        onlinePlayerIds = new HashSet<string>();
+        onlinePlayersMap = new Dictionary<string, SendingInvitation>();
 
         displayName.text = State.DisplayName;
 
@@ -166,16 +166,16 @@ public class CreateNewGameController : MonoBehaviour
                 for (int i = 0; i < onlinePlayers.Length; i++)
                 {
                     Player player = onlinePlayers[i];
-                    if (player.playerId.Equals(State.PlayerId) || onlinePlayerIds.Contains(player.playerId))
+                    if (player.playerId.Equals(State.PlayerId) || onlinePlayersMap.ContainsKey(player.playerId))
                     {
                         continue;
                     }
 
-                    onlinePlayerIds.Add(player.playerId);
-
                     SendingInvitation invitation = Instantiate(sendingInvitationPrefab, onlinePlayersGrid.transform).GetComponent<SendingInvitation>();
                     invitation.playerId = player.playerId;
                     invitation.displayName.text = player.displayName;
+
+                    onlinePlayersMap[player.playerId] = invitation;
                 }
             }
 
@@ -215,6 +215,8 @@ public class CreateNewGameController : MonoBehaviour
                             card.displayName.text = teamPlayer.DisplayName;
 
                             numberOfPlayersText.text = $"Players ({teamPlayers.Count}/4)";
+
+                            Destroy(onlinePlayersMap[invitation.playerId].gameObject);
                         }
                     }
                 }

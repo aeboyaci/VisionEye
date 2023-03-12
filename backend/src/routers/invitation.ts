@@ -28,6 +28,7 @@ router.get("/", enforceAuthentication, async (req, resp, next) => {
           ),
           sender_player AS (
               SELECT invitation.team_id,
+                     invitation.id as invitation_id,
                      player.id as player_id,
                      player.display_name,
                      player.avatar_url
@@ -37,7 +38,8 @@ router.get("/", enforceAuthentication, async (req, resp, next) => {
                       AND
                           invitation.receiver_player_id = ${player.id}
           )
-      SELECT team.name as "name",
+      SELECT sender_player.invitation_id as id,
+             team.name as "name",
              json_build_object(
                      'playerId', sender_player.player_id,
                      'displayName', sender_player.display_name,
@@ -71,17 +73,18 @@ router.get("/", enforceAuthentication, async (req, resp, next) => {
 
 router.post("/", enforceAuthentication, async (req, resp, next) => {
   const player = req.user!;
-  const { id, status } = req.body;
-
-  // Validate request body
-  if (status !== invitation_status.ACCEPTED || status !== invitation_status.REJECTED) {
-    return resp.status(400).json({
-      success: false,
-      error: "invalid request body",
-    });
-  }
 
   try {
+    const { id, status } = req.body;
+
+    // Validate request body
+    if (status !== invitation_status.ACCEPTED || status !== invitation_status.REJECTED) {
+      return resp.status(400).json({
+        success: false,
+        error: "invalid request body",
+      });
+    }
+
     await database.$transaction(async (tx) => {
       // Check if the invitation with "id" is sent for the player
       const invitation = await tx.invitation.findFirst({
