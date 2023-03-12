@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TeamPlayer
@@ -60,6 +61,61 @@ public class CreateNewGameController : MonoBehaviour
     private HashSet<string> teamPlayerIds;
     private Dictionary<string, SendingInvitation> onlinePlayersMap;
 
+    /*public async void CreateRelay()
+    {
+        try
+        {
+
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(3);
+            joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+            Debug.Log("Join code is " + " " + joinCode);
+
+            RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+
+            NetworkManager.Singleton.StartHost();
+            await File.WriteAllTextAsync("joinCode.txt", joinCode);
+            Debug.Log("The join code has been saved.");
+            //System.Threading.Thread.Sleep(1000*20);
+
+
+            SceneManager.LoadScene("NewScene");
+
+        }
+        catch (RelayServiceException e)
+        {
+            Debug.Log(e);
+        }
+
+    }
+
+    private async void JoinRelay()
+    {
+        try
+        {
+            string joinCode = File.ReadAllText("joinCode.txt");
+            Debug.Log("Joining relay with " + " " + joinCode);
+            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+
+            RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+            NetworkManager.Singleton.StartClient();
+
+            SceneManager.LoadScene("NewScene");
+
+
+        }
+        catch (RelayServiceException e)
+        {
+            Debug.Log(e);
+        }
+
+
+    }
+
+    */
     void Start()
     {
         teamPlayers = new List<TeamPlayer>();
@@ -90,7 +146,21 @@ public class CreateNewGameController : MonoBehaviour
 
     private void goBackButtonOnClick()
     {
-        StartCoroutine(DeleteTeam_Coroutine());
+        if (State.IsCaptain)
+        {
+            StartCoroutine(DeleteTeam_Coroutine());
+        }
+        else
+        {
+            goBackHome();
+        }
+    }
+
+    private void goBackHome()
+    {
+        GameObject homeScreen = GameObject.Find("HomeScreen");
+        gameObject.SetActive(false);
+        homeScreen.transform.GetChild(0).gameObject.SetActive(true);
     }
 
     private void randomButtonOnClick()
@@ -123,9 +193,7 @@ public class CreateNewGameController : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            GameObject homeScreen = GameObject.Find("HomeScreen");
-            gameObject.SetActive(false);
-            homeScreen.transform.GetChild(0).gameObject.SetActive(true);
+            goBackHome();
         }
     }
 

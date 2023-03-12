@@ -9,11 +9,14 @@ using UnityEngine.UI;
 
 public class Invitation : MonoBehaviour
 {
-    public TMPro.TMP_Text teamName;
     public TMPro.TMP_Text sender;
     public Button acceptButton;
     public Button rejectButton;
     bool isAccepted;
+    public string id;
+    public string teamId;
+
+
 
     void Start()
     {
@@ -34,7 +37,6 @@ public class Invitation : MonoBehaviour
 
     IEnumerator AnswerInvitations_Coroutine()
     {
-        string id = "testId";
         string status;
         switch (isAccepted)
         {
@@ -53,8 +55,23 @@ public class Invitation : MonoBehaviour
         UnityWebRequest request = Client.PrepareRequest("POST", "/invitations", answer);
         yield return request.SendWebRequest();
 
-        if (!(request.result == UnityWebRequest.Result.Success))
+        if (!(request.result == UnityWebRequest.Result.Success)) {
             throw new Exception("Answer is invalid!");
+        }    
+        else {
+            if (isAccepted) {
+                State.ActiveTeamId = teamId;
+                State.IsCaptain = false;
+
+                GameObject createNewGameScreen = GameObject.Find("CreateNewGameScreen");
+                GameObject homeScreen = GameObject.Find("HomeScreen");
+
+                createNewGameScreen.transform.GetChild(0).gameObject.SetActive(true);
+                homeScreen.transform.GetChild(0).gameObject.SetActive(false);
+            }
+            else
+                Destroy(gameObject);
+        }
     }
 
 

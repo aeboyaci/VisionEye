@@ -31,10 +31,15 @@ class Me {
 class InvitationResponse {
 
 
-    [JsonProperty("teamName")]
-    public string teamName;
+    [JsonProperty("name")]
+    public string name;
     [JsonProperty("sender")]
-    public string sender;
+    public Sender sender;
+    [JsonProperty("id")]
+    public string id;
+    [JsonProperty("teamId")]
+    public string teamId;
+
 }
 
 class Player {
@@ -83,6 +88,7 @@ public class HomeScreen : MonoBehaviour
     public Button createNewGameButton;
     public GameObject teamContainer;
     public GameObject invitationContainer;
+    private HashSet<string> invitationSet;
 
     private void OnCreateNewGameButtonClick()
     {
@@ -99,7 +105,6 @@ public class HomeScreen : MonoBehaviour
             
             Response response = Client.GetResponseValue(request);
             List<PastTeamResponse> teams = JsonConvert.DeserializeObject<List<PastTeamResponse>>(response.data.ToString());
-            Debug.Log(teams.Count);
             for (int i = 0; i < teams.Count; i++)
             {
                 PastTeamResponse team = teams[i];
@@ -145,6 +150,7 @@ public class HomeScreen : MonoBehaviour
             CreateTeamResponse createTeamResponse = JsonConvert.DeserializeObject<CreateTeamResponse>(response.data.ToString());
 
             State.ActiveTeamId = createTeamResponse.teamId;
+            State.IsCaptain = true;
 
             GameObject createNewGameScreen = GameObject.Find("CreateNewGameScreen");
             gameObject.SetActive(false);
@@ -152,6 +158,7 @@ public class HomeScreen : MonoBehaviour
         }
     }
 
+    
     IEnumerator GetInvitations_Coroutine() {
         while (true)
         {
@@ -165,13 +172,15 @@ public class HomeScreen : MonoBehaviour
                 for (int i = 0; i < invitations.Count; i++)
                 {
                     InvitationResponse invitation = invitations[i];
-                    if (invitationObj != null)
+                    if (invitationObj != null && !(invitationSet.Contains(invitation.sender.playerId)))
                     {
                         var row = Instantiate(invitationObj, invitationContainer.transform).GetComponent<Invitation>();
-                        row.teamName.text = invitation.teamName;
-                        row.sender.text = invitation.sender;
-
+                        row.sender.text = invitation.sender.displayName;
+                        row.id = invitation.id;
+                        row.teamId = invitation.teamId;
+                        invitationSet.Add(invitation.sender.playerId);
                     }
+                    
                 }
             }
             else Debug.Log(request.result);
@@ -183,6 +192,7 @@ public class HomeScreen : MonoBehaviour
 
     void Start()
     {
+        invitationSet = new HashSet<string>();
         createNewGameButton.onClick.AddListener(OnCreateNewGameButtonClick);
         StartCoroutine(GetMyInfo_Coroutine());
         StartCoroutine(GetPastTeams_Coroutine());
