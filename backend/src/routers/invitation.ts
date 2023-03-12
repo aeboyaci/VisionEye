@@ -56,7 +56,7 @@ router.get("/", enforceAuthentication, async (req, resp, next) => {
       FROM team
                INNER JOIN team_players ON team_players.team_id = team.id
                INNER JOIN sender_player ON sender_player.team_id = team.id
-      GROUP BY team.id, sender_player.player_id, sender_player.display_name, sender_player.avatar_url;
+      GROUP BY team.id, sender_player.invitation_id, sender_player.player_id, sender_player.display_name, sender_player.avatar_url;
     `;
 
     return resp.status(200).json({
