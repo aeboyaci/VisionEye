@@ -238,7 +238,7 @@ router.get("/:teamId", enforceAuthentication, async (req, resp, next) => {
                  )
              ) as players
       FROM team
-          INNER JOIN game_information ON game_information.team_id = team.id
+          LEFT JOIN game_information ON game_information.team_id = team.id
           INNER JOIN player_information ON player_information.team_id = team.id
       WHERE team.id = ${teamId}
       GROUP BY team.id, team."name"`;
@@ -268,10 +268,18 @@ router.get("/:teamId/delete", enforceAuthentication, async (req, resp, next) => 
       });
     }
 
-    await database.team.delete({
-      where: {
-        id: teamId,
-      }
+    await database.$transaction(async (tx) => {
+      await tx.team_has_players.deleteMany({
+        where: {
+          team_id: teamId,
+        },
+      });
+
+      await tx.team.delete({
+        where: {
+          id: teamId,
+        },
+      });
     });
 
     return resp.status(200).json({
@@ -337,42 +345,6 @@ router.get("/:teamId/relay-server", enforceAuthentication, async (req, resp, nex
         "joinCode": relayServer.join_code,
         "hasStarted": game !== null,
       },
-    });
-  } catch (ex) {
-    return resp.status(500).json({
-      success: false,
-      error: ex,
-    });
-  }
-});
-
-router.get("/:teamId/invitations", enforceAuthentication, async (req, resp, next) => {
-  const player = req.user!;
-  const { teamId } = req.params;
-
-  try {
-    // Check if the player is a member of the team
-    const { isMember } = await checkIfThePlayerIsAMember(teamId, player.id);
-    if (!isMember) {
-      return resp.status(401).json({
-        success: false,
-        error: "You are not allowed to this operation",
-      });
-    }
-
-    const result = await database.$queryRaw`
-        SELECT p.id              as "playerId",
-               p.display_name    as "displayName",
-               p.avatar_url      as "avatarUrl",
-               invitation.status as status
-        FROM invitation
-                 INNER JOIN player p on p.id = invitation.receiver_player_id
-        WHERE team_id = ${teamId};
-    `;
-
-    return resp.status(200).json({
-      success: true,
-      data: result,
     });
   } catch (ex) {
     return resp.status(500).json({

@@ -16,8 +16,6 @@ public class Invitation : MonoBehaviour
     public string id;
     public string teamId;
 
-
-
     void Start()
     {
         acceptButton.onClick.AddListener(acceptInvitation);
@@ -29,6 +27,7 @@ public class Invitation : MonoBehaviour
         isAccepted = true;
         StartCoroutine(AnswerInvitations_Coroutine());
     }
+
     private void rejectInvitation()
     {
         isAccepted = false;
@@ -47,7 +46,7 @@ public class Invitation : MonoBehaviour
                 status = "REJECTED";
                 break;
         }
-        Debug.Log("Answering invitatin");
+        Debug.Log("Answering invitation");
         Debug.Log(isAccepted);
         AnswerInvitation answer = new AnswerInvitation();
         answer.id = id;
@@ -73,7 +72,4 @@ public class Invitation : MonoBehaviour
                 Destroy(gameObject);
         }
     }
-
-
-
 }

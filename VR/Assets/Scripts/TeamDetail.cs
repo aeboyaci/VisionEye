@@ -4,27 +4,35 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
-class Game {
-
+class Game
+{
     [JsonProperty("roomName")]
     public string roomName;
+
     [JsonProperty("score")]
-    public string score;
+    public int? score;
+
     [JsonProperty("minutesPlayed")]
-    public string minutesPlayed;
-    [JsonProperty("startDate")]
-    public string startDate;
+    public int? minutesPlayed;
+
+    [JsonProperty("startedAt")]
+    public string startedAt;
+
     [JsonProperty("id")]
     public string id;
 }
 
-class TeamResponse {
+class TeamResponse
+{
     [JsonProperty("id")]
     public string id;
+
     [JsonProperty("name")]
     public string name;
+
     [JsonProperty("games")]
     public List<Game> games;
+
     [JsonProperty("players")]
     public List<Player> players;
 }
@@ -60,13 +68,13 @@ public class TeamDetail : MonoBehaviour
             for (int i = 0; i < pastGames.Count; i++)
             {
                 Game game = pastGames[i];
-                 if (pastgame != null)
+                 if (pastgame != null && game.id != null)
                 {
                     var row = Instantiate(pastgame, gameContainer.transform).GetComponent<PastGame>();
                     row.roomname.text = game.roomName;
-                    row.score.text = game.score;
-                    row.minutes.text = game.minutesPlayed;
-                    row.date.text = game.startDate;
+                    row.score.text = game.score.ToString();
+                    row.minutes.text = game.minutesPlayed.ToString();
+                    row.date.text = game.startedAt;
                     row.id = game.id;
                 }
             }

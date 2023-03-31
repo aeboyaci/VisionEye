@@ -56,8 +56,6 @@ public class CreateNewGameController : MonoBehaviour
     public SendingInvitation sendingInvitationPrefab;
     public TeamPlayerCard teamPlayerCardPrefab;
 
-    private List<TeamPlayer> teamPlayers;
-
     private HashSet<string> teamPlayerIds;
     private Dictionary<string, SendingInvitation> onlinePlayersMap;
 
@@ -118,18 +116,16 @@ public class CreateNewGameController : MonoBehaviour
     */
     void Start()
     {
-        teamPlayers = new List<TeamPlayer>();
-
         teamPlayerIds = new HashSet<string>();
         onlinePlayersMap = new Dictionary<string, SendingInvitation>();
 
         displayName.text = State.DisplayName;
 
         numberOfPlayersText.text = "Players (1/4)";
-        TeamPlayer me = new TeamPlayer { DisplayName = State.DisplayName, AvatarUrl = State.AvatarUrl };
-        teamPlayers.Add(me);
+        teamPlayerIds.Add(State.PlayerId);
+
         TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
-        card.displayName.text = me.DisplayName;
+        card.displayName.text = State.DisplayName;
 
         if (!State.IsCaptain)
         {
@@ -255,37 +251,36 @@ public class CreateNewGameController : MonoBehaviour
     {
         while (true)
         {
-            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/invitations");
+            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}");
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
                 Response response = Client.GetResponseValue(request);
-                TeamInvitationResponse[] teamInvitationResponse = JsonConvert.DeserializeObject<TeamInvitationResponse[]>(response.data.ToString());
+                TeamResponse[] teamResponse = JsonConvert.DeserializeObject<TeamResponse[]>(response.data.ToString());
 
-                for (int i = 0; i < teamInvitationResponse.Length; i++)
+                for (int i = 0; i < teamResponse[0].players.Count; i++)
                 {
-                    TeamInvitationResponse invitation = teamInvitationResponse[i];
-                    if (invitation.playerId.Equals(State.PlayerId))
+                    Player player = teamResponse[0].players[i];
+                    if (player.playerId.Equals(State.PlayerId))
                     {
                         continue;
                     }
 
-                    if (invitation.status.Equals("ACCEPTED") && !teamPlayerIds.Contains(invitation.playerId))
+                    teamPlayerIds.Add(player.playerId);
+
+                    if (teamPlayerIds.Count < 5)
                     {
-                        teamPlayerIds.Add(invitation.playerId);
-
-                        if (teamPlayers.Count < 5)
+                        TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
+                        card.displayName.text = player.displayName;
+                        if (player.isCaptain)
                         {
-                            TeamPlayer teamPlayer = new TeamPlayer { DisplayName = invitation.displayName, AvatarUrl = invitation.avatarUrl };
-                            teamPlayers.Add(teamPlayer);
-                            TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
-                            card.displayName.text = teamPlayer.DisplayName;
-
-                            numberOfPlayersText.text = $"Players ({teamPlayers.Count}/4)";
-
-                            Destroy(onlinePlayersMap[invitation.playerId].gameObject);
+                            card.captainText.gameObject.SetActive(true);
                         }
+
+                        numberOfPlayersText.text = $"Players ({teamPlayerIds.Count}/4)";
+
+                        Destroy(onlinePlayersMap[player.playerId].gameObject);
                     }
                 }
             }

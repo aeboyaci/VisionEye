@@ -108,6 +108,14 @@ router.post("/", enforceAuthentication, async (req, resp, next) => {
         },
       });
 
+      await tx.team_has_players.create({
+        data: {
+          team_id: invitation.team_id,
+          player_id: player.id,
+          is_captain: false,
+        },
+      });
+
       // Update all others “invitation” entries
       await tx.invitation.updateMany({
         where: {
