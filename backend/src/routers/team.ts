@@ -294,6 +294,40 @@ router.get("/:teamId/delete", enforceAuthentication, async (req, resp, next) => 
   }
 });
 
+router.get("/:teamId/delete/player/:playerId", enforceAuthentication, async (req, resp, next) => {
+  const player = req.user!;
+  const {teamId, playerId} = req.params;
+
+  try {
+    const { isCaptain, isMember } = await checkIfThePlayerIsAMember(teamId, player.id);
+    if ((player.id !== playerId && !isCaptain) || !isMember) {
+      return resp.status(401).json({
+        success: false,
+        error: "You are not allowed to this operation",
+      });
+    }
+
+    await database.team_has_players.delete({
+      where: {
+        team_id_player_id: {
+          team_id: teamId,
+          player_id: playerId,
+        },
+      },
+    });
+
+    return resp.status(200).json({
+      success: true,
+      data: "player successfully deleted from team",
+    });
+  } catch (ex) {
+    return resp.status(500).json({
+      success: false,
+      error: ex,
+    });
+  }
+});
+
 router.get("/:teamId/relay-server", enforceAuthentication, async (req, resp, next) => {
   const player = req.user!;
   const { teamId } = req.params;

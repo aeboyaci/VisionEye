@@ -142,14 +142,7 @@ public class CreateNewGameController : MonoBehaviour
 
     private void goBackButtonOnClick()
     {
-        if (State.IsCaptain)
-        {
-            StartCoroutine(DeleteTeam_Coroutine());
-        }
-        else
-        {
-            goBackHome();
-        }
+        StartCoroutine(Delete_Coroutine());
     }
 
     private void goBackHome()
@@ -182,10 +175,20 @@ public class CreateNewGameController : MonoBehaviour
         teamNameInputField.text = teamName;
     }
 
-    IEnumerator DeleteTeam_Coroutine()
+    IEnumerator Delete_Coroutine()
     {
-        UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/delete");
-        yield return request.SendWebRequest();
+        UnityWebRequest request;
+
+        if (State.IsCaptain)
+        {
+            request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/delete");
+            yield return request.SendWebRequest();
+        }
+        else
+        {
+            request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/delete/player/{State.PlayerId}");
+            yield return request.SendWebRequest();
+        }
 
         if (request.result == UnityWebRequest.Result.Success)
         {
@@ -272,6 +275,9 @@ public class CreateNewGameController : MonoBehaviour
                     if (teamPlayerIds.Count < 5)
                     {
                         TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
+                        card.playerId = player.playerId;
+                        card.teamPlayerIds = teamPlayerIds;
+                        card.numberOfPlayersText = numberOfPlayersText;
                         card.displayName.text = player.displayName;
                         if (player.isCaptain)
                         {
@@ -281,6 +287,7 @@ public class CreateNewGameController : MonoBehaviour
                         numberOfPlayersText.text = $"Players ({teamPlayerIds.Count}/4)";
 
                         Destroy(onlinePlayersMap[player.playerId].gameObject);
+                        onlinePlayersMap.Remove(player.playerId);
                     }
                 }
             }
