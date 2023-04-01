@@ -17,14 +17,14 @@ public class Question
     public bool isNiche { get; set; }
 }
 
-public class Program
+public class PublicAPIClient
 {
-    public static async Task Main()
+    public static async Task<Question[]> FetchQuiz()
     {
         using var client = new HttpClient();
         var response = await client.GetAsync("https://the-trivia-api.com/api/questions");
         var json = await response.Content.ReadAsStringAsync();
         var questions = JsonConvert.DeserializeObject<Question[]>(json);
-
+        return questions;
     }
 }
