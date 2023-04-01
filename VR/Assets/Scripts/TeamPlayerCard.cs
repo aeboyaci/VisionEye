@@ -13,6 +13,7 @@ public class TeamPlayerCard : MonoBehaviour
 
     public string playerId;
     public HashSet<string> teamPlayerIds;
+    public Dictionary<string, SendingInvitation> onlinePlayersMap;
 
     void Start()
     {
@@ -35,7 +36,11 @@ public class TeamPlayerCard : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            numberOfPlayersText.text = $"Players ({teamPlayerIds.Count - 1}/4)";
+            teamPlayerIds.Remove(playerId);
+            onlinePlayersMap.Remove(playerId);
+            numberOfPlayersText.text = $"Players ({teamPlayerIds.Count}/4)";
+
+            Destroy(gameObject);
         }
     }
 }

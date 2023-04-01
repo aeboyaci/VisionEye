@@ -125,10 +125,13 @@ public class CreateNewGameController : MonoBehaviour
         teamPlayerIds.Add(State.PlayerId);
 
         TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
+        card.playerId = State.PlayerId;
         card.displayName.text = State.DisplayName;
 
         if (!State.IsCaptain)
         {
+            card.captainText.gameObject.SetActive(true);
+
             nextButton.gameObject.SetActive(false);
         }
 
@@ -262,10 +265,26 @@ public class CreateNewGameController : MonoBehaviour
                 Response response = Client.GetResponseValue(request);
                 TeamResponse teamResponse = JsonConvert.DeserializeObject<TeamResponse>(response.data.ToString());
 
-                for (int i = 0; i < teamResponse.players.Count; i++)
+                bool isKicked = true;
+                for(int i = 0; i < teamResponse.players.Count; i++)
                 {
                     Player player = teamResponse.players[i];
                     if (player.playerId.Equals(State.PlayerId))
+                    {
+                        isKicked = false;
+                        break;
+                    }
+                }
+                if (isKicked)
+                {
+                    goBackButtonOnClick();
+                    break;
+                }
+
+                for (int i = 0; i < teamResponse.players.Count; i++)
+                {
+                    Player player = teamResponse.players[i];
+                    if (player.playerId.Equals(State.PlayerId) || teamPlayerIds.Contains(player.playerId))
                     {
                         continue;
                     }
@@ -277,6 +296,7 @@ public class CreateNewGameController : MonoBehaviour
                         TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
                         card.playerId = player.playerId;
                         card.teamPlayerIds = teamPlayerIds;
+                        card.onlinePlayersMap = onlinePlayersMap;
                         card.numberOfPlayersText = numberOfPlayersText;
                         card.displayName.text = player.displayName;
                         if (player.isCaptain)
@@ -287,7 +307,6 @@ public class CreateNewGameController : MonoBehaviour
                         numberOfPlayersText.text = $"Players ({teamPlayerIds.Count}/4)";
 
                         Destroy(onlinePlayersMap[player.playerId].gameObject);
-                        onlinePlayersMap.Remove(player.playerId);
                     }
                 }
             }
