@@ -798,11 +798,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: ebdffda3-bd62-4628-ba8f-2e2c1065d648
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: VR
+  organizationId: unity_25c5ddf772a457a933c3
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

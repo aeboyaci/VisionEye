@@ -257,11 +257,11 @@ public class CreateNewGameController : MonoBehaviour
             if (request.result == UnityWebRequest.Result.Success)
             {
                 Response response = Client.GetResponseValue(request);
-                TeamResponse[] teamResponse = JsonConvert.DeserializeObject<TeamResponse[]>(response.data.ToString());
+                TeamResponse teamResponse = JsonConvert.DeserializeObject<TeamResponse>(response.data.ToString());
 
-                for (int i = 0; i < teamResponse[0].players.Count; i++)
+                for (int i = 0; i < teamResponse.players.Count; i++)
                 {
-                    Player player = teamResponse[0].players[i];
+                    Player player = teamResponse.players[i];
                     if (player.playerId.Equals(State.PlayerId))
                     {
                         continue;
