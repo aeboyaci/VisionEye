@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -47,17 +48,36 @@ public class GameDetailController : MonoBehaviour
     public GameObject achievements;
     public AchievementRow achievementRowPrefab;
 
+    private Dictionary<string, AchievementRow> achievementObjectMap;
+
     void Start()
     {
-        
         displayName.text = State.DisplayName;
+    }
+
+    void OnEnable()
+    {
+        if (achievementObjectMap == null)
+        {
+            achievementObjectMap = new Dictionary<string, AchievementRow>();
+        }
+
+        foreach (string key in achievementObjectMap.Keys)
+        {
+            Destroy(achievementObjectMap[key].gameObject);
+        }
+        achievementObjectMap = new Dictionary<string, AchievementRow>();
 
         StartCoroutine(GetGameDetailInformation_Coroutine());
     }
-    
+
+    void OnDisable()
+    {
+        StopCoroutine(GetGameDetailInformation_Coroutine());
+    }
+
     IEnumerator GetGameDetailInformation_Coroutine()
     {
-        
         UnityWebRequest request = Client.PrepareRequest("GET", $"/games/{State.ActiveGameId}");
         yield return request.SendWebRequest();
 
@@ -77,6 +97,8 @@ public class GameDetailController : MonoBehaviour
                 row.score.text = ach.score.ToString();
                 row.owner.text = ach.owner;
                 row.description.text = ach.description;
+
+                achievementObjectMap[ach.id] = row;
             }
         }
     }

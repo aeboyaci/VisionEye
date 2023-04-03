@@ -57,69 +57,34 @@ public class CreateNewGameController : MonoBehaviour
     public TeamPlayerCard teamPlayerCardPrefab;
 
     private HashSet<string> teamPlayerIds;
-    private Dictionary<string, SendingInvitation> onlinePlayersMap;
 
-    /*public async void CreateRelay()
-    {
-        try
-        {
+    private Dictionary<string, TeamPlayerCard> teamPlayerObjectMap;
+    private Dictionary<string, SendingInvitation> onlinePlayerObjectMap;
 
-            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(3);
-            joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
-            Debug.Log("Join code is " + " " + joinCode);
-
-            RelayServerData relayServerData = new RelayServerData(allocation, "dtls");
-
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-
-            NetworkManager.Singleton.StartHost();
-            await File.WriteAllTextAsync("joinCode.txt", joinCode);
-            Debug.Log("The join code has been saved.");
-            //System.Threading.Thread.Sleep(1000*20);
-
-
-            SceneManager.LoadScene("NewScene");
-
-        }
-        catch (RelayServiceException e)
-        {
-            Debug.Log(e);
-        }
-
-    }
-
-    private async void JoinRelay()
-    {
-        try
-        {
-            string joinCode = File.ReadAllText("joinCode.txt");
-            Debug.Log("Joining relay with " + " " + joinCode);
-            JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-
-            RelayServerData relayServerData = new RelayServerData(joinAllocation, "dtls");
-
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-            NetworkManager.Singleton.StartClient();
-
-            SceneManager.LoadScene("NewScene");
-
-
-        }
-        catch (RelayServiceException e)
-        {
-            Debug.Log(e);
-        }
-
-
-    }
-
-    */
     void Start()
     {
-        teamPlayerIds = new HashSet<string>();
-        onlinePlayersMap = new Dictionary<string, SendingInvitation>();
-
         displayName.text = State.DisplayName;
+
+        randomButton.onClick.AddListener(randomButtonOnClick);
+        goBackButton.onClick.AddListener(goBackButtonOnClick);
+    }
+
+    void OnEnable()
+    {
+        if (teamPlayerObjectMap == null || onlinePlayerObjectMap == null)
+        {
+            resetOrInitializeVariables();
+        }
+
+        foreach (string key in teamPlayerObjectMap.Keys)
+        {
+            Destroy(teamPlayerObjectMap[key].gameObject);
+        }
+        foreach (string key in onlinePlayerObjectMap.Keys)
+        {
+            Destroy(onlinePlayerObjectMap[key].gameObject);
+        }
+        resetOrInitializeVariables();
 
         numberOfPlayersText.text = "Players (1/4)";
         teamPlayerIds.Add(State.PlayerId);
@@ -127,20 +92,37 @@ public class CreateNewGameController : MonoBehaviour
         TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
         card.playerId = State.PlayerId;
         card.displayName.text = State.DisplayName;
+        teamPlayerObjectMap[State.PlayerId] = card;
 
         if (!State.IsCaptain)
         {
-            card.captainText.gameObject.SetActive(true);
-
             nextButton.gameObject.SetActive(false);
         }
-
-        randomButton.onClick.AddListener(randomButtonOnClick);
-        goBackButton.onClick.AddListener(goBackButtonOnClick);
+        else
+        {
+            card.captainText.gameObject.SetActive(true);
+        }
 
         StartCoroutine(PollRelayServerInformation_Coroutine());
         StartCoroutine(GetOnlinePlayers_Coroutine());
         StartCoroutine(GetTeamPlayers_Coroutine());
+    }
+
+    void OnDisable()
+    {
+        StopCoroutine(PollRelayServerInformation_Coroutine());
+        StopCoroutine(GetOnlinePlayers_Coroutine());
+        StopCoroutine(GetTeamPlayers_Coroutine());
+    }
+
+    private void resetOrInitializeVariables()
+    {
+        teamPlayerIds = new HashSet<string>();
+
+        teamPlayerObjectMap = new Dictionary<string, TeamPlayerCard>();
+        onlinePlayerObjectMap = new Dictionary<string, SendingInvitation>();
+
+        teamNameInputField.text = "";
     }
 
     private void goBackButtonOnClick()
@@ -213,7 +195,7 @@ public class CreateNewGameController : MonoBehaviour
 
                 if (relayServer.hasStarted)
                 {
-                    // TODO connect to the captain's relay-server
+                    // TODO: navigate to the map
                 }
             }
 
@@ -236,7 +218,7 @@ public class CreateNewGameController : MonoBehaviour
                 for (int i = 0; i < onlinePlayers.Length; i++)
                 {
                     Player player = onlinePlayers[i];
-                    if (player.playerId.Equals(State.PlayerId) || onlinePlayersMap.ContainsKey(player.playerId))
+                    if (player.playerId.Equals(State.PlayerId) || onlinePlayerObjectMap.ContainsKey(player.playerId))
                     {
                         continue;
                     }
@@ -245,7 +227,7 @@ public class CreateNewGameController : MonoBehaviour
                     invitation.playerId = player.playerId;
                     invitation.displayName.text = player.displayName;
 
-                    onlinePlayersMap[player.playerId] = invitation;
+                    onlinePlayerObjectMap[player.playerId] = invitation;
                 }
             }
 
@@ -265,22 +247,6 @@ public class CreateNewGameController : MonoBehaviour
                 Response response = Client.GetResponseValue(request);
                 TeamResponse teamResponse = JsonConvert.DeserializeObject<TeamResponse>(response.data.ToString());
 
-                bool isKicked = true;
-                for(int i = 0; i < teamResponse.players.Count; i++)
-                {
-                    Player player = teamResponse.players[i];
-                    if (player.playerId.Equals(State.PlayerId))
-                    {
-                        isKicked = false;
-                        break;
-                    }
-                }
-                if (isKicked)
-                {
-                    goBackButtonOnClick();
-                    break;
-                }
-
                 for (int i = 0; i < teamResponse.players.Count; i++)
                 {
                     Player player = teamResponse.players[i];
@@ -294,21 +260,29 @@ public class CreateNewGameController : MonoBehaviour
                     if (teamPlayerIds.Count < 5)
                     {
                         TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
-                        card.playerId = player.playerId;
                         card.teamPlayerIds = teamPlayerIds;
-                        card.onlinePlayersMap = onlinePlayersMap;
+                        card.onlinePlayersMap = onlinePlayerObjectMap;
                         card.numberOfPlayersText = numberOfPlayersText;
+
+                        card.playerId = player.playerId;
                         card.displayName.text = player.displayName;
                         if (player.isCaptain)
                         {
                             card.captainText.gameObject.SetActive(true);
                         }
 
+                        teamPlayerObjectMap[player.playerId] = card;
+
                         numberOfPlayersText.text = $"Players ({teamPlayerIds.Count}/4)";
 
-                        Destroy(onlinePlayersMap[player.playerId].gameObject);
+                        Destroy(onlinePlayerObjectMap[player.playerId].gameObject);
                     }
                 }
+            }
+            else if (request.result != UnityWebRequest.Result.InProgress && request.result != UnityWebRequest.Result.Success)
+            {
+                goBackButtonOnClick();
+                break;
             }
 
             yield return new WaitForSeconds(1.0f);
