@@ -16,16 +16,10 @@ public class Response
 
 public class Client
 {
-    private static readonly string API_URL = "https://scary-verse.com";
+    public static readonly string API_URL = "https://scary-verse.com";
 
-    private static string AccessToken { get; set; }
-    private static string IdToken { get; set; }
-
-    public static void SetTokens(string access, string id)
-    {
-        AccessToken = access;
-        IdToken = id;
-    }
+    public static string AccessToken { get; set; }
+    public static string IdToken { get; set; }
 
     public static UnityWebRequest PrepareRequest(string method, string endpoint, object body = null)
     {

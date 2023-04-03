@@ -88,7 +88,52 @@ public class HomeScreen : MonoBehaviour
     public Button createNewGameButton;
     public GameObject teamContainer;
     public GameObject invitationContainer;
+    
     private HashSet<string> invitationSet;
+    private Dictionary<string, PastTeam> teamObjectMap;
+    private Dictionary<string, Invitation> invitationObjectMap;
+
+    void Start()
+    {
+        createNewGameButton.onClick.AddListener(OnCreateNewGameButtonClick);
+    }
+
+    void OnEnable()
+    {
+        if(teamObjectMap == null || invitationObjectMap == null)
+        {
+            resetOrInitializeVariables();
+        }
+
+        foreach (string key in teamObjectMap.Keys)
+        {
+            Destroy(teamObjectMap[key].gameObject);
+        }
+        foreach (string key in invitationObjectMap.Keys)
+        {
+            Destroy(invitationObjectMap[key].gameObject);
+        }
+
+        resetOrInitializeVariables();
+
+        StartCoroutine(GetMyInfo_Coroutine());
+        StartCoroutine(GetPastTeams_Coroutine());
+        StartCoroutine(GetInvitations_Coroutine());
+    }
+
+    void OnDisable()
+    {
+        StopCoroutine(GetMyInfo_Coroutine());
+        StopCoroutine(GetPastTeams_Coroutine());
+        StopCoroutine(GetInvitations_Coroutine());        
+    }
+
+    private void resetOrInitializeVariables()
+    {
+        invitationSet = new HashSet<string>();
+        teamObjectMap = new Dictionary<string, PastTeam>();
+        invitationObjectMap = new Dictionary<string, Invitation>();
+    }
 
     private void OnCreateNewGameButtonClick()
     {
@@ -97,7 +142,6 @@ public class HomeScreen : MonoBehaviour
 
     IEnumerator GetPastTeams_Coroutine()
     {
-      
         UnityWebRequest request = Client.PrepareRequest("GET", "/teams");
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
@@ -110,13 +154,13 @@ public class HomeScreen : MonoBehaviour
                 PastTeamResponse team = teams[i];
                 if (pastTeam != null)
                 {
-
                     var row = Instantiate(pastTeam, teamContainer.transform).GetComponent<PastTeam>();
                     row.name.text = team.name;
                     row.totalScoreGained.text = team.totalScoreGained;
                     row.minutesPlayed.text = team.minutesPlayed;
                     row.id = team.id;
 
+                    teamObjectMap[team.id] = row;
                 }
             }
         }
@@ -124,7 +168,6 @@ public class HomeScreen : MonoBehaviour
 
     IEnumerator GetMyInfo_Coroutine()
     {
-
         UnityWebRequest request = Client.PrepareRequest("GET", "/players/me");
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
@@ -136,7 +179,6 @@ public class HomeScreen : MonoBehaviour
             screenDisplayName.text = State.DisplayName;
         }
         else Debug.Log(request.result);
-
     }
 
     IEnumerator CreateNewGame_Coroutine()
@@ -158,7 +200,6 @@ public class HomeScreen : MonoBehaviour
         }
     }
 
-    
     IEnumerator GetInvitations_Coroutine() {
         while (true)
         {
@@ -178,24 +219,15 @@ public class HomeScreen : MonoBehaviour
                         row.sender.text = invitation.sender.displayName;
                         row.id = invitation.id;
                         row.teamId = invitation.teamId;
+
                         invitationSet.Add(invitation.sender.playerId);
+                        invitationObjectMap[invitation.id] = row;
                     }
-                    
                 }
             }
             else Debug.Log(request.result);
 
             yield return new WaitForSeconds(1.0f);
         }
-
-    }
-
-    void Start()
-    {
-        invitationSet = new HashSet<string>();
-        createNewGameButton.onClick.AddListener(OnCreateNewGameButtonClick);
-        StartCoroutine(GetMyInfo_Coroutine());
-        StartCoroutine(GetPastTeams_Coroutine());
-        StartCoroutine(GetInvitations_Coroutine());
     }
 }

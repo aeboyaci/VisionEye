@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadGameScript : MonoBehaviour
-{
-    // Start is called before the first frame update
-   
+{  
     public void loadScene(string sceneName)
     {
+        // TODO: send request to create game if the player is captain
+
         SceneManager.LoadScene(sceneName);  
     }
 }

@@ -68,7 +68,8 @@ public class OTPController : MonoBehaviour
                     string status = statusResponse.status;
                     if (status.Equals("COMPLETED"))
                     {
-                        Client.SetTokens(statusResponse.tokens.accessToken, statusResponse.tokens.idToken);
+                        Client.AccessToken = statusResponse.tokens.accessToken;
+                        Client.IdToken = statusResponse.tokens.idToken;
 
                         GameObject homeScreen = GameObject.Find("HomeScreen");
                         gameObject.SetActive(false);
