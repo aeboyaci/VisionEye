@@ -5,12 +5,10 @@ using UnityEngine.UI;
 
 public class keyPad : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] public TMPro.TMP_Text Ans;
-    public string answer = "3131";
+    public string answer = "1234";
     public void Number(int number)
-    {
-        
+    {   
         if(Ans.text=="Invalid"){
             Ans.text = number.ToString();
         }else{
@@ -19,14 +17,12 @@ public class keyPad : MonoBehaviour
                 Ans.text += number.ToString();
 
             }
-
         }
-        
     }
 
     public void execPass(){
         if(Ans.text == answer){
-            Ans.text="Helal mk";
+            Ans.text="Correct!";
         }
         else
         {
