@@ -19,7 +19,6 @@ public class cubeColorControl : MonoBehaviour
         if (cubePassForDoor == "ABCBA")
         {
             GetComponent<Renderer>().material.color = new Color(0, 204, 102);
-            print("you can pass ");
         }
     }
 }

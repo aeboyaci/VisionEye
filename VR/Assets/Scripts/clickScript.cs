@@ -30,7 +30,6 @@ public class clickScript : MonoBehaviour
                     {
                     if(mAnimator!= null)
                     {
-                        print("inside");
                         mAnimator.SetBool("push", true);
                         
 
@@ -38,8 +37,7 @@ public class clickScript : MonoBehaviour
 
                     cubeColorControl.cubePassForDoor = cubeColorControl.cubePassForDoor + textOfButton.text;
 
-                    
-                    print(cubeColorControl.cubePassForDoor);
+                  
                     }
                 }
             }
