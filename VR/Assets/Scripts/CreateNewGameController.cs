@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class TeamPlayer
 {
@@ -176,12 +175,12 @@ public class CreateNewGameController : MonoBehaviour
         }
 
         teamNameInputField.text = teamName;
-        StartCoroutine(Update_Coroutine());
+        StartCoroutine(Update_Coroutine(teamName));
     }
 
     private void nextButtonOnClick()
     {
-        StartCoroutine(CreateGame_Coroutine();
+        StartCoroutine(CreateGame_Coroutine());
     }
 
     IEnumerator CreateGame_Coroutine()
@@ -253,7 +252,7 @@ public class CreateNewGameController : MonoBehaviour
             }
             else if (request.result != UnityWebRequest.Result.InProgress && request.result != UnityWebRequest.Result.Success)
             {
-                goBackHome();
+                StartCoroutine(Delete_Coroutine());
                 break;
             }
 
