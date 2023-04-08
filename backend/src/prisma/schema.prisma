@@ -32,19 +32,10 @@ model team {
   name       String   @default("")
   created_at DateTime @default(now())
 
-  relay_server            relay_server?
   team_has_players        team_has_players[]
   invitation              invitation[]
   game                    game[]
   player_has_achievements player_has_achievements[]
-}
-
-model relay_server {
-  team_id   String @id
-  team      team   @relation(fields: [team_id], references: [id], onDelete: Cascade)
-  ipv4      String
-  port      Int
-  join_code String
 }
 
 model team_has_players {

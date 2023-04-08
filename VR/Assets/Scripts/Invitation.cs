@@ -54,11 +54,10 @@ public class Invitation : MonoBehaviour
         UnityWebRequest request = Client.PrepareRequest("POST", "/invitations", answer);
         yield return request.SendWebRequest();
 
-        if (!(request.result == UnityWebRequest.Result.Success)) {
-            throw new Exception("Answer is invalid!");
-        }    
-        else {
-            if (isAccepted) {
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            if (isAccepted)
+            {
                 State.ActiveTeamId = teamId;
                 State.IsCaptain = false;
 
@@ -70,6 +69,10 @@ public class Invitation : MonoBehaviour
             }
             else
                 Destroy(gameObject);
+        }
+        else if (request.result != UnityWebRequest.Result.InProgress && request.result == UnityWebRequest.Result.Success)
+        {
+            Destroy(gameObject);
         }
     }
 }
