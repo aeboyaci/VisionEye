@@ -8,15 +8,8 @@ type PlayerInformation = {
 }
 
 type TeamInformation = {
-  team: {
     id: string;
     name: string;
-  },
-  relayServer: {
-    ipv4: string;
-    port: number;
-    joinCode: string;
-  }
 };
 
 type TeamDetail = {
@@ -141,8 +134,8 @@ router.post("/update", enforceAuthentication, async (req, resp, next) => {
   const player = req.user!;
 
   try {
-    const body: TeamInformation = req.body;
-    const { isCaptain } = await checkIfThePlayerIsAMember(body.team.id, player.id);
+    const { id, name }: TeamInformation = req.body;
+    const { isCaptain } = await checkIfThePlayerIsAMember(id, player.id);
     if (!isCaptain) {
       return resp.status(401).json({
         success: false,
@@ -152,17 +145,10 @@ router.post("/update", enforceAuthentication, async (req, resp, next) => {
 
     await database.team.update({
       where: {
-        id: body.team.id,
+        id: id,
       },
       data: {
-        name: body.team.name,
-        relay_server: {
-          create: {
-            ipv4: body.relayServer.ipv4,
-            port: body.relayServer.port,
-            join_code: body.relayServer.joinCode,
-          },
-        },
+        name: name,
       },
     });
 
@@ -255,6 +241,40 @@ router.get("/:teamId", enforceAuthentication, async (req, resp, next) => {
   }
 });
 
+router.get("/:teamId/status", enforceAuthentication, async (req, resp, next) => {
+  const player = req.user!;
+  const { teamId } = req.params;
+
+  try {
+    const { isMember } = await checkIfThePlayerIsAMember(teamId, player.id);
+    if (!isMember) {
+      return resp.status(401).json({
+        success: false,
+        error: "You are not allowed to this operation",
+      });
+    }
+
+    const game = await database.game.findFirst({
+      where: {
+        team_id: teamId,
+        ended_at: null,
+      },
+    });
+
+    return resp.status(200).json({
+      success: true,
+      data: {
+        hasStarted: game !== null,
+      },
+    });
+  } catch (ex) {
+    return resp.status(500).json({
+      success: false,
+      error: ex,
+    });
+  }
+});
+
 router.get("/:teamId/delete", enforceAuthentication, async (req, resp, next) => {
   const player = req.user!;
   const { teamId } = req.params;
@@ -319,66 +339,6 @@ router.get("/:teamId/delete/player/:playerId", enforceAuthentication, async (req
     return resp.status(200).json({
       success: true,
       data: "player successfully deleted from team",
-    });
-  } catch (ex) {
-    return resp.status(500).json({
-      success: false,
-      error: ex,
-    });
-  }
-});
-
-router.get("/:teamId/relay-server", enforceAuthentication, async (req, resp, next) => {
-  const player = req.user!;
-  const { teamId } = req.params;
-
-  try {
-    // Check if the player is a member of the team
-    const { isMember } = await checkIfThePlayerIsAMember(teamId, player.id);
-    if (!isMember) {
-      return resp.status(401).json({
-        success: false,
-        error: "You are not allowed to this operation",
-      });
-    }
-
-    const relayServer = await database.relay_server.findFirst({
-      where: {
-        team_id: teamId,
-      },
-      select: {
-        ipv4: true,
-        port: true,
-        join_code: true,
-      },
-    });
-    if (relayServer === null) {
-      return resp.status(200).json({
-        success: true,
-        data: {
-          "ipv4": "",
-          "port": 0,
-          "joinCode": "",
-          "hasStarted": false,
-        },
-      });
-    }
-
-    const game = await database.game.findFirst({
-      where: {
-        team_id: teamId,
-        ended_at: null,
-      },
-    });
-
-    return resp.status(200).json({
-      success: true,
-      data: {
-        "ipv4": relayServer.ipv4,
-        "port": relayServer.port,
-        "joinCode": relayServer.join_code,
-        "hasStarted": game !== null,
-      },
     });
   } catch (ex) {
     return resp.status(500).json({

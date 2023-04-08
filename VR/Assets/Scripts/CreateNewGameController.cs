@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TeamPlayer
 {
@@ -27,19 +28,28 @@ public class TeamInvitationResponse
     public string status;
 }
 
-public class RelayServerResponse
+public class TeamGameStatus
 {
-    [JsonProperty("ipv4")]
-    public string ipv4;
-
-    [JsonProperty("port")]
-    public int port;
-
-    [JsonProperty("joinCode")]
-    public string joinCode;
-
     [JsonProperty("hasStarted")]
     public bool hasStarted;
+}
+
+public class GameCreate
+{
+    [JsonProperty("teamId")]
+    public string teamId;
+
+    [JsonProperty("roomId")]
+    public string roomId;
+}
+
+public class TeamUpdate
+{
+    [JsonProperty("id")]
+    public string id;
+
+    [JsonProperty("name")]
+    public string name;
 }
 
 public class CreateNewGameController : MonoBehaviour
@@ -66,6 +76,7 @@ public class CreateNewGameController : MonoBehaviour
         displayName.text = State.DisplayName;
 
         randomButton.onClick.AddListener(randomButtonOnClick);
+        nextButton.onClick.AddListener(nextButtonOnClick);
         goBackButton.onClick.AddListener(goBackButtonOnClick);
     }
 
@@ -96,6 +107,7 @@ public class CreateNewGameController : MonoBehaviour
 
         if (!State.IsCaptain)
         {
+            randomButton.gameObject.SetActive(false);
             nextButton.gameObject.SetActive(false);
         }
         else
@@ -103,14 +115,14 @@ public class CreateNewGameController : MonoBehaviour
             card.captainText.gameObject.SetActive(true);
         }
 
-        StartCoroutine(PollRelayServerInformation_Coroutine());
+        StartCoroutine(PollGameStatus_Coroutine());
         StartCoroutine(GetOnlinePlayers_Coroutine());
         StartCoroutine(GetTeamPlayers_Coroutine());
     }
 
     void OnDisable()
     {
-        StopCoroutine(PollRelayServerInformation_Coroutine());
+        StopCoroutine(PollGameStatus_Coroutine());
         StopCoroutine(GetOnlinePlayers_Coroutine());
         StopCoroutine(GetTeamPlayers_Coroutine());
     }
@@ -158,6 +170,37 @@ public class CreateNewGameController : MonoBehaviour
         }
 
         teamNameInputField.text = teamName;
+        StartCoroutine(Update_Coroutine());
+    }
+
+    private void nextButtonOnClick()
+    {
+        StartCoroutine(CreateGame_Coroutine();
+    }
+
+    IEnumerator CreateGame_Coroutine()
+    {
+        GameCreate gameCreate = new GameCreate();
+        gameCreate.teamId = State.ActiveTeamId;
+        gameCreate.roomId = "69f1ab92-f71b-4823-ba1f-1dcdaa29a3c7";
+
+        UnityWebRequest request = Client.PrepareRequest("POST", $"/games", gameCreate);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            SceneManager.LoadScene("Demo01");
+        }
+    }
+
+    IEnumerator Update_Coroutine(string teamName)
+    {
+        TeamUpdate teamUpdate = new TeamUpdate();
+        teamUpdate.id = State.ActiveTeamId;
+        teamUpdate.name = teamName;
+
+        UnityWebRequest request = Client.PrepareRequest("POST", $"/teams/update", teamUpdate);
+        yield return request.SendWebRequest();
     }
 
     IEnumerator Delete_Coroutine()
@@ -181,22 +224,27 @@ public class CreateNewGameController : MonoBehaviour
         }
     }
 
-    IEnumerator PollRelayServerInformation_Coroutine()
+    IEnumerator PollGameStatus_Coroutine()
     {
         while (true)
         {
-            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/relay-server");
+            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/status");
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
             {
                 Response response = Client.GetResponseValue(request);
-                RelayServerResponse relayServer = JsonConvert.DeserializeObject<RelayServerResponse>(response.data.ToString());
+                TeamGameStatus teamGameStatus = JsonConvert.DeserializeObject<TeamGameStatus>(response.data.ToString());
 
-                if (relayServer.hasStarted)
+                if (teamGameStatus.hasStarted)
                 {
-                    // TODO: navigate to the map
+                    SceneManager.LoadScene("Demo01");
                 }
+            }
+            else if (request.result != UnityWebRequest.Result.InProgress && request.result != UnityWebRequest.Result.Success)
+            {
+                goBackHome();
+                break;
             }
 
             yield return new WaitForSeconds(1.0f);
@@ -246,6 +294,8 @@ public class CreateNewGameController : MonoBehaviour
             {
                 Response response = Client.GetResponseValue(request);
                 TeamResponse teamResponse = JsonConvert.DeserializeObject<TeamResponse>(response.data.ToString());
+
+                teamNameInputField.text = teamResponse.name;
 
                 for (int i = 0; i < teamResponse.players.Count; i++)
                 {
