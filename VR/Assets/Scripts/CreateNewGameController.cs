@@ -52,6 +52,12 @@ public class TeamUpdate
     public string name;
 }
 
+public class GameCreateResponse
+{
+    [JsonProperty("gameId")]
+    public string gameId;
+}
+
 public class CreateNewGameController : MonoBehaviour
 {
     public TMPro.TMP_Text displayName;
@@ -189,6 +195,10 @@ public class CreateNewGameController : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
+            Response response = Client.GetResponseValue(request);
+            GameCreateResponse gameCreateResponse = JsonConvert.DeserializeObject<GameCreateResponse>(response.data.ToString());
+            State.ActiveGameId = gameCreateResponse.gameId;
+
             SceneManager.LoadScene("Demo01");
         }
     }

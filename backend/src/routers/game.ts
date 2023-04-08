@@ -62,7 +62,7 @@ router.post("/", enforceAuthentication, async (req, resp, next) => {
         });
       }
 
-      await tx.game.create({
+      const game = await tx.game.create({
         data: {
           team_id: teamId,
           room_id: roomId,
@@ -72,7 +72,9 @@ router.post("/", enforceAuthentication, async (req, resp, next) => {
 
       return resp.status(200).json({
         success: true,
-        data: "game created successfully",
+        data: {
+          gameId: game.id,
+        },
       });
     });
   } catch (ex) {
