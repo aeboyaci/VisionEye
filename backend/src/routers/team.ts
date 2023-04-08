@@ -288,6 +288,18 @@ router.get("/:teamId/delete", enforceAuthentication, async (req, resp, next) => 
       });
     }
 
+    const games = await database.game.findMany({
+      where: {
+        team_id: teamId,
+      },
+    });
+    if (games.length > 0) {
+      return resp.status(200).json({
+        success: false,
+        data: "team has game(s)",
+      });
+    }
+
     await database.$transaction(async (tx) => {
       await tx.team_has_players.deleteMany({
         where: {
