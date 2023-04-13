@@ -48,9 +48,9 @@ public class NetworkPlayer : MonoBehaviour
     {
         if (photonView.IsMine)
         {
-            rightHand.gameObject.SetActive(false);
-            leftHand.gameObject.SetActive(false);
-            head.gameObject.SetActive(false);
+            //rightHand.gameObject.SetActive(false);
+            //leftHand.gameObject.SetActive(false);
+            //shead.gameObject.SetActive(false);
             MapPosition(head, headRig);
             MapPosition(leftHand, leftHandRig);
             MapPosition(rightHand, rightHandRig);
