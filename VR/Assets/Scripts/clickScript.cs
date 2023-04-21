@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 
 public class clickScript : MonoBehaviour
@@ -10,42 +12,35 @@ public class clickScript : MonoBehaviour
     public TMPro.TMP_Text textOfButton;
     public GameObject button;
     private Animator mAnimator;
+
+    public Button buttonToPush;
     void Start()
     {
         mAnimator= GetComponent<Animator>();
+        buttonToPush.onClick.AddListener(onButtonClick);
     }
-   
 
-    // Update is called once per frame
-    void Update()
+    private void onButtonClick()
+    {
+        if (mAnimator != null)
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    //Select stage    
-                    if (hit.transform == button.transform)
-                    {
-                    if(mAnimator!= null)
-                    {
-                        mAnimator.SetBool("push", true);
-                        
+            mAnimator.SetBool("push", true);
 
-                    }
 
-                    cubeColorControl.cubePassForDoor = cubeColorControl.cubePassForDoor + textOfButton.text;
-
-                  
-                    }
-                }
-            }
-            if (Input.GetMouseButtonUp(0))
-            {
-               mAnimator.SetBool("push", false);
         }
-        }
+        Invoke("WaitAndDoSomething", 2f);
+
+
+        cubeColorControl.cubePassForDoor = cubeColorControl.cubePassForDoor + textOfButton.text;
+        Debug.Log(cubeColorControl.cubePassForDoor);
+    }
+
+    void WaitAndDoSomething()
+    {
+        mAnimator.SetBool("push", false);
+    }
+    // Update is called once per frame
+
 
 
     }
