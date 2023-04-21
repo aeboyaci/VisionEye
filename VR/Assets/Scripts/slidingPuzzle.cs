@@ -35,8 +35,8 @@ public class slidingPuzzle : MonoBehaviour
 
            // StartCoroutine(Bekle(1f));
             mAnimator.SetBool("isMoved", true);
-            print(x+" "+y+" "+z);
-            print(position.x + " " + position.y + " " + position.z);
+           // print(x+" "+y+" "+z);
+           // print(position.x + " " + position.y + " " + position.z);
         }
     }
 
