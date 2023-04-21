@@ -19,7 +19,7 @@ public class walkingSound : MonoBehaviour
     {
         Vector3 positionCurrent = transform.position;
         float distance = Vector3.Distance(positionCurrent, positionLast);
-        Debug.Log(distance);
+        //Debug.Log(distance);
         if (distance > footstepOption)
         {
             footstepSound.enabled= true;
@@ -30,7 +30,7 @@ public class walkingSound : MonoBehaviour
         else
         {
             float newtimer = Time.time;
-            Debug.Log(timer+ "   "+newtimer);
+            //Debug.Log(timer+ "   "+newtimer);
             if(newtimer>(timer+0.6))
             footstepSound.enabled= false;
         }
