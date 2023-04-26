@@ -95,10 +95,12 @@ public class CreateNewGameController : MonoBehaviour
         foreach (string key in teamPlayerObjectMap.Keys)
         {
             Destroy(teamPlayerObjectMap[key].gameObject);
+            teamPlayerObjectMap.Remove(key);
         }
         foreach (string key in onlinePlayerObjectMap.Keys)
         {
             Destroy(onlinePlayerObjectMap[key].gameObject);
+            onlinePlayerObjectMap.Remove(key);
         }
         resetOrInitializeVariables();
 
@@ -198,7 +200,7 @@ public class CreateNewGameController : MonoBehaviour
             GameCreateResponse gameCreateResponse = JsonConvert.DeserializeObject<GameCreateResponse>(response.data.ToString());
             State.ActiveGameId = gameCreateResponse.gameId;
 
-            SceneManager.LoadScene("Demo01");
+            SceneManager.LoadScene("Demo_01");
         }
     }
 
@@ -247,7 +249,7 @@ public class CreateNewGameController : MonoBehaviour
 
                 if (teamGameStatus.hasStarted)
                 {
-                    SceneManager.LoadScene("Demo01");
+                    SceneManager.LoadScene("Demo_01");
                 }
             }
             else if (request.result != UnityWebRequest.Result.InProgress && request.result != UnityWebRequest.Result.Success)
