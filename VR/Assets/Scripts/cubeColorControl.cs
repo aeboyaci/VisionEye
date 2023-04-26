@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class cubeColorControl : MonoBehaviour
@@ -42,6 +43,18 @@ public class cubeColorControl : MonoBehaviour
         {
             GetComponent<Renderer>().material.color = new Color(0, 204, 102);
             door.GetComponent<XRGrabInteractable>().enabled = true;
+
+            StartCoroutine(CompleteAchievement_Coroutine());
         }
+    }
+
+    IEnumerator CompleteAchievement_Coroutine()
+    {
+        string achievementId = "aaf6c38f-8c35-4d54-944d-3fb76ba4f630";
+
+        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = State.ActiveGameId, teamId = State.ActiveTeamId };
+
+        UnityWebRequest request = Client.PrepareRequest("POST", $"/achievements", body);
+        yield return request.SendWebRequest();
     }
 }

@@ -1,6 +1,8 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class TVPuzzleController : MonoBehaviour
@@ -56,6 +58,8 @@ public class TVPuzzleController : MonoBehaviour
         {
             quizContainer.gameObject.SetActive(false);
             animator.enabled = true;
+
+            StartCoroutine(CompleteAchievement_Coroutine());
         }
     }
 
@@ -65,5 +69,15 @@ public class TVPuzzleController : MonoBehaviour
         {
             quizContainer.gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator CompleteAchievement_Coroutine()
+    {
+        string achievementId = "3e9d198e-26a2-45d8-879f-1b9c53fb28d5";
+
+        AchievementBody body = new AchievementBody{ achievementId = achievementId, gameId = State.ActiveGameId, teamId = State.ActiveTeamId };
+
+        UnityWebRequest request = Client.PrepareRequest("POST", $"/achievements", body);
+        yield return request.SendWebRequest();
     }
 }

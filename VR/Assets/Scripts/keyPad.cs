@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -34,12 +35,24 @@ public class keyPad : MonoBehaviour
 
     public void execPass(){
         if(Ans.text == answer){
-            Ans.text="Correct!";
-            door.GetComponent<XRGrabInteractable>().enabled =true;   
+            Ans.text = "Correct!";
+            door.GetComponent<XRGrabInteractable>().enabled = true;
+
+            StartCoroutine(CompleteAchievement_Coroutine());
         }
         else
         {
-            Ans.text="Invalid";
+            Ans.text = "Invalid";
         }
+    }
+
+    IEnumerator CompleteAchievement_Coroutine()
+    {
+        string achievementId = "2c8db393-f9fa-406f-a0c5-4ec11b0e6b0a";
+
+        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = State.ActiveGameId, teamId = State.ActiveTeamId };
+
+        UnityWebRequest request = Client.PrepareRequest("POST", $"/achievements", body);
+        yield return request.SendWebRequest();
     }
 }
