@@ -29,6 +29,8 @@ public class NetworkPlayer : MonoBehaviour
 
         XROrigin rig = FindObjectOfType<XROrigin>();
         headRig = rig.transform.Find("Camera Offset/Main Camera");
+        Debug.Log(headRig);
+
         leftHandRig = rig.transform.Find("Camera Offset/LeftHand Controller");
         rightHandRig = rig.transform.Find("Camera Offset/RightHand Controller");
 

@@ -19,7 +19,7 @@ MonoBehaviour:
     AppIdVoice: 40e94425-7ec0-4769-8594-6d8c657726db
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: eu
     Server: 
     Port: 0
     ProxyServer: 
@@ -42,6 +42,7 @@ MonoBehaviour:
   - CantHearYou
   - ChangeColour
   - HeresWhy
+  - RPCRefreshPlayerValues
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

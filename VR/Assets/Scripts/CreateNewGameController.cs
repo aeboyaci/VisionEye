@@ -200,7 +200,7 @@ public class CreateNewGameController : MonoBehaviour
             GameCreateResponse gameCreateResponse = JsonConvert.DeserializeObject<GameCreateResponse>(response.data.ToString());
             State.ActiveGameId = gameCreateResponse.gameId;
 
-            SceneManager.LoadScene("Demo_01");
+            SceneManager.LoadScene("bahadir");
         }
     }
 
@@ -249,7 +249,7 @@ public class CreateNewGameController : MonoBehaviour
 
                 if (teamGameStatus.hasStarted)
                 {
-                    SceneManager.LoadScene("Demo_01");
+                    SceneManager.LoadScene("bahadir");
                 }
             }
             else if (request.result != UnityWebRequest.Result.InProgress && request.result != UnityWebRequest.Result.Success)
