@@ -17,7 +17,7 @@ public class PastGame : MonoBehaviour
 
     private void OnTeamDetailButtonClick()
     {
-        State.ActiveGameId = id;
+        ScaryVerseState.ActiveGameId = id;
 
         GameObject gameDetailScreen = GameObject.Find("GameDetailScreen");
         GameObject teamDetailScreen = GameObject.Find("TeamDetailScreen");

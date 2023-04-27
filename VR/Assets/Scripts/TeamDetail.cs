@@ -51,7 +51,7 @@ public class TeamDetail : MonoBehaviour
 
     void Start()
     {
-        displayName.text = State.DisplayName;
+        displayName.text = ScaryVerseState.DisplayName;
     }
 
     void OnEnable()
@@ -87,7 +87,7 @@ public class TeamDetail : MonoBehaviour
 
     IEnumerator GetGamesAndPlayers_Coroutine()
     {
-        UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}");
+        UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{ScaryVerseState.ActiveTeamId}");
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)

@@ -78,7 +78,7 @@ public class CreateNewGameController : MonoBehaviour
 
     void Start()
     {
-        displayName.text = State.DisplayName;
+        displayName.text = ScaryVerseState.DisplayName;
 
         randomButton.onClick.AddListener(randomButtonOnClick);
         nextButton.onClick.AddListener(nextButtonOnClick);
@@ -105,14 +105,14 @@ public class CreateNewGameController : MonoBehaviour
         resetOrInitializeVariables();
 
         numberOfPlayersText.text = "Players (1/4)";
-        teamPlayerIds.Add(State.PlayerId);
+        teamPlayerIds.Add(ScaryVerseState.PlayerId);
 
         TeamPlayerCard card = Instantiate(teamPlayerCardPrefab, teamPlayersGrid.transform).GetComponent<TeamPlayerCard>();
-        card.playerId = State.PlayerId;
-        card.displayName.text = State.DisplayName;
-        teamPlayerObjectMap[State.PlayerId] = card;
+        card.playerId = ScaryVerseState.PlayerId;
+        card.displayName.text = ScaryVerseState.DisplayName;
+        teamPlayerObjectMap[ScaryVerseState.PlayerId] = card;
 
-        if (!State.IsCaptain)
+        if (!ScaryVerseState.IsCaptain)
         {
             randomButton.gameObject.SetActive(false);
             nextButton.gameObject.SetActive(false);
@@ -188,7 +188,7 @@ public class CreateNewGameController : MonoBehaviour
     IEnumerator CreateGame_Coroutine()
     {
         GameCreate gameCreate = new GameCreate();
-        gameCreate.teamId = State.ActiveTeamId;
+        gameCreate.teamId = ScaryVerseState.ActiveTeamId;
         gameCreate.roomId = "69f1ab92-f71b-4823-ba1f-1dcdaa29a3c7";
 
         UnityWebRequest request = Client.PrepareRequest("POST", $"/games", gameCreate);
@@ -198,7 +198,7 @@ public class CreateNewGameController : MonoBehaviour
         {
             Response response = Client.GetResponseValue(request);
             GameCreateResponse gameCreateResponse = JsonConvert.DeserializeObject<GameCreateResponse>(response.data.ToString());
-            State.ActiveGameId = gameCreateResponse.gameId;
+            ScaryVerseState.ActiveGameId = gameCreateResponse.gameId;
 
             SceneManager.LoadScene("bahadir");
         }
@@ -207,7 +207,7 @@ public class CreateNewGameController : MonoBehaviour
     IEnumerator Update_Coroutine(string teamName)
     {
         TeamUpdate teamUpdate = new TeamUpdate();
-        teamUpdate.id = State.ActiveTeamId;
+        teamUpdate.id = ScaryVerseState.ActiveTeamId;
         teamUpdate.name = teamName;
 
         UnityWebRequest request = Client.PrepareRequest("POST", $"/teams/update", teamUpdate);
@@ -218,14 +218,14 @@ public class CreateNewGameController : MonoBehaviour
     {
         UnityWebRequest request;
 
-        if (State.IsCaptain)
+        if (ScaryVerseState.IsCaptain)
         {
-            request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/delete");
+            request = Client.PrepareRequest("GET", $"/teams/{ScaryVerseState.ActiveTeamId}/delete");
             yield return request.SendWebRequest();
         }
         else
         {
-            request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/delete/player/{State.PlayerId}");
+            request = Client.PrepareRequest("GET", $"/teams/{ScaryVerseState.ActiveTeamId}/delete/player/{ScaryVerseState.PlayerId}");
             yield return request.SendWebRequest();
         }
 
@@ -239,7 +239,7 @@ public class CreateNewGameController : MonoBehaviour
     {
         while (true)
         {
-            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/status");
+            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{ScaryVerseState.ActiveTeamId}/status");
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
@@ -277,7 +277,7 @@ public class CreateNewGameController : MonoBehaviour
                 for (int i = 0; i < onlinePlayers.Length; i++)
                 {
                     Player player = onlinePlayers[i];
-                    if (player.playerId.Equals(State.PlayerId) || onlinePlayerObjectMap.ContainsKey(player.playerId))
+                    if (player.playerId.Equals(ScaryVerseState.PlayerId) || onlinePlayerObjectMap.ContainsKey(player.playerId))
                     {
                         continue;
                     }
@@ -298,7 +298,7 @@ public class CreateNewGameController : MonoBehaviour
     {
         while (true)
         {
-            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}");
+            UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{ScaryVerseState.ActiveTeamId}");
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)
@@ -311,7 +311,7 @@ public class CreateNewGameController : MonoBehaviour
                 for (int i = 0; i < teamResponse.players.Count; i++)
                 {
                     Player player = teamResponse.players[i];
-                    if (player.playerId.Equals(State.PlayerId) || teamPlayerIds.Contains(player.playerId))
+                    if (player.playerId.Equals(ScaryVerseState.PlayerId) || teamPlayerIds.Contains(player.playerId))
                     {
                         continue;
                     }

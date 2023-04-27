@@ -30,7 +30,7 @@ public class ChestPuzzleController : MonoBehaviour
     {
         string achievementId = "92d76ec8-c475-4a01-96ab-d1ac6532b457";
 
-        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = State.ActiveGameId, teamId = State.ActiveTeamId };
+        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = ScaryVerseState.ActiveGameId, teamId = ScaryVerseState.ActiveTeamId };
 
         UnityWebRequest request = Client.PrepareRequest("POST", $"/achievements", body);
         yield return request.SendWebRequest();

@@ -174,9 +174,9 @@ public class HomeScreen : MonoBehaviour
         {
             Response response = Client.GetResponseValue(request);
             Me myself = JsonConvert.DeserializeObject<Me>(response.data.ToString());
-            State.PlayerId = myself.id;
-            State.DisplayName = myself.displayName;
-            screenDisplayName.text = State.DisplayName;
+            ScaryVerseState.PlayerId = myself.id;
+            ScaryVerseState.DisplayName = myself.displayName;
+            screenDisplayName.text = ScaryVerseState.DisplayName;
         }
         else Debug.Log(request.result);
     }
@@ -191,8 +191,8 @@ public class HomeScreen : MonoBehaviour
             Response response = Client.GetResponseValue(request);
             CreateTeamResponse createTeamResponse = JsonConvert.DeserializeObject<CreateTeamResponse>(response.data.ToString());
 
-            State.ActiveTeamId = createTeamResponse.teamId;
-            State.IsCaptain = true;
+            ScaryVerseState.ActiveTeamId = createTeamResponse.teamId;
+            ScaryVerseState.IsCaptain = true;
 
             GameObject createNewGameScreen = GameObject.Find("CreateNewGameScreen");
             gameObject.SetActive(false);

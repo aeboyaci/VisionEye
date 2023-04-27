@@ -75,7 +75,7 @@ public class TVPuzzleController : MonoBehaviour
     {
         string achievementId = "3e9d198e-26a2-45d8-879f-1b9c53fb28d5";
 
-        AchievementBody body = new AchievementBody{ achievementId = achievementId, gameId = State.ActiveGameId, teamId = State.ActiveTeamId };
+        AchievementBody body = new AchievementBody{ achievementId = achievementId, gameId = ScaryVerseState.ActiveGameId, teamId = ScaryVerseState.ActiveTeamId };
 
         UnityWebRequest request = Client.PrepareRequest("POST", $"/achievements", body);
         yield return request.SendWebRequest();

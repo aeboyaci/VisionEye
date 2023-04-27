@@ -52,7 +52,7 @@ public class GameDetailController : MonoBehaviour
 
     void Start()
     {
-        displayName.text = State.DisplayName;
+        displayName.text = ScaryVerseState.DisplayName;
     }
 
     void OnEnable()
@@ -78,7 +78,7 @@ public class GameDetailController : MonoBehaviour
 
     IEnumerator GetGameDetailInformation_Coroutine()
     {
-        UnityWebRequest request = Client.PrepareRequest("GET", $"/games/{State.ActiveGameId}");
+        UnityWebRequest request = Client.PrepareRequest("GET", $"/games/{ScaryVerseState.ActiveGameId}");
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)

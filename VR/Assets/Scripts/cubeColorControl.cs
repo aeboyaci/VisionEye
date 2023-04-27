@@ -52,7 +52,7 @@ public class cubeColorControl : MonoBehaviour
     {
         string achievementId = "aaf6c38f-8c35-4d54-944d-3fb76ba4f630";
 
-        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = State.ActiveGameId, teamId = State.ActiveTeamId };
+        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = ScaryVerseState.ActiveGameId, teamId = ScaryVerseState.ActiveTeamId };
 
         UnityWebRequest request = Client.PrepareRequest("POST", $"/achievements", body);
         yield return request.SendWebRequest();

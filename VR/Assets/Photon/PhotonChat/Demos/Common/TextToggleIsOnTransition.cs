@@ -15,7 +15,7 @@ namespace Photon.Chat.UtilityScripts
 {
 
 	/// <summary>
-	/// Use this on toggles texts to have some color transition on the text depending on the isOn State.
+	/// Use this on toggles texts to have some color transition on the text depending on the isOn ScaryVerseState.
 	/// </summary>
 	[RequireComponent(typeof(Text))]
 	public class TextToggleIsOnTransition : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler

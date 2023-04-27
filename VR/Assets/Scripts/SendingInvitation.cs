@@ -30,7 +30,7 @@ public class SendingInvitation : MonoBehaviour
 
     IEnumerator SendInvitation_Coroutine()
     {
-        UnityWebRequest request = Client.PrepareRequest("POST", $"/teams/{State.ActiveTeamId}/invitations", new SendingInvitationBody { playerId = this.playerId });
+        UnityWebRequest request = Client.PrepareRequest("POST", $"/teams/{ScaryVerseState.ActiveTeamId}/invitations", new SendingInvitationBody { playerId = this.playerId });
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)

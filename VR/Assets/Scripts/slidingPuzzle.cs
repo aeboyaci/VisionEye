@@ -54,7 +54,7 @@ public class slidingPuzzle : MonoBehaviour
     {
         string achievementId = "513a7b25-13e7-484d-91ef-485fc09cd9ff";
 
-        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = State.ActiveGameId, teamId = State.ActiveTeamId };
+        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = ScaryVerseState.ActiveGameId, teamId = ScaryVerseState.ActiveTeamId };
 
         UnityWebRequest request = Client.PrepareRequest("POST", $"/achievements", body);
         yield return request.SendWebRequest();

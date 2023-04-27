@@ -57,8 +57,8 @@ public class Invitation : MonoBehaviour
         {
             if (isAccepted)
             {
-                State.ActiveTeamId = teamId;
-                State.IsCaptain = false;
+                ScaryVerseState.ActiveTeamId = teamId;
+                ScaryVerseState.IsCaptain = false;
 
                 GameObject createNewGameScreen = GameObject.Find("CreateNewGameScreen");
                 GameObject homeScreen = GameObject.Find("HomeScreen");

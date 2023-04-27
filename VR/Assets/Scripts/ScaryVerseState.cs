@@ -1,4 +1,4 @@
-public class State
+public class ScaryVerseState
 {
     public static string PlayerId { get; set; }
     public static string DisplayName { get; set; }

@@ -17,7 +17,7 @@ public class TeamPlayerCard : MonoBehaviour
 
     void Start()
     {
-        if (State.IsCaptain && !playerId.Equals(State.PlayerId))
+        if (ScaryVerseState.IsCaptain && !playerId.Equals(ScaryVerseState.PlayerId))
         {
             kickButton.gameObject.SetActive(true);
             kickButton.onClick.AddListener(kickButtonOnClick);
@@ -31,7 +31,7 @@ public class TeamPlayerCard : MonoBehaviour
 
     IEnumerator KickPlayer_Coroutine()
     {
-        UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{State.ActiveTeamId}/delete/player/{playerId}");
+        UnityWebRequest request = Client.PrepareRequest("GET", $"/teams/{ScaryVerseState.ActiveTeamId}/delete/player/{playerId}");
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)

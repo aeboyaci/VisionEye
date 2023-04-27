@@ -26,7 +26,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roomOptions.MaxPlayers = 4;
         roomOptions.IsVisible = true;
         roomOptions.IsOpen = true;
-        PhotonNetwork.JoinOrCreateRoom(State.ActiveTeamId, roomOptions, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom(ScaryVerseState.ActiveTeamId, roomOptions, TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()

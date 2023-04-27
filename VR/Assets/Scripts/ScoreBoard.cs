@@ -30,7 +30,7 @@ public class ScoreBoard : MonoBehaviour
 
     void Start()
     {
-        playerDisplayName.text = State.DisplayName;
+        playerDisplayName.text = ScaryVerseState.DisplayName;
     }
 
     void OnEnable()

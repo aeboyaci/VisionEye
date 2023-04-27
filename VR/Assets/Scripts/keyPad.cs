@@ -50,7 +50,7 @@ public class keyPad : MonoBehaviour
     {
         string achievementId = "2c8db393-f9fa-406f-a0c5-4ec11b0e6b0a";
 
-        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = State.ActiveGameId, teamId = State.ActiveTeamId };
+        AchievementBody body = new AchievementBody { achievementId = achievementId, gameId = ScaryVerseState.ActiveGameId, teamId = ScaryVerseState.ActiveTeamId };
 
         UnityWebRequest request = Client.PrepareRequest("POST", $"/achievements", body);
         yield return request.SendWebRequest();

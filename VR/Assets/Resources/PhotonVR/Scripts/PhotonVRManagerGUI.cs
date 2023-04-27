@@ -31,7 +31,7 @@ namespace Photon.VR
             GUILayout.Space(10);
             if (PhotonNetwork.IsConnected)
             {
-                GUILayout.Label($"State: {PhotonVRManager.GetConnectionState()}");
+                GUILayout.Label($"ScaryVerseState: {PhotonVRManager.GetConnectionState()}");
                 GUILayout.Label($"Ping: {PhotonNetwork.GetPing()}");
                 GUILayout.Label($"Room: {(PhotonNetwork.InRoom ? PhotonNetwork.CurrentRoom.Name : "Not in a room")}");
                 if(!PhotonNetwork.InRoom && !manager.JoinRoomOnConnect)
