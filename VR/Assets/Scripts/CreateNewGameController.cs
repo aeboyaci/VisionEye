@@ -200,7 +200,7 @@ public class CreateNewGameController : MonoBehaviour
             GameCreateResponse gameCreateResponse = JsonConvert.DeserializeObject<GameCreateResponse>(response.data.ToString());
             ScaryVerseState.ActiveGameId = gameCreateResponse.gameId;
 
-            SceneManager.LoadScene("bahadir");
+            SceneManager.LoadScene("Demo_01");
         }
     }
 
@@ -249,7 +249,7 @@ public class CreateNewGameController : MonoBehaviour
 
                 if (teamGameStatus.hasStarted)
                 {
-                    SceneManager.LoadScene("bahadir");
+                    SceneManager.LoadScene("Demo_01");
                 }
             }
             else if (request.result != UnityWebRequest.Result.InProgress && request.result != UnityWebRequest.Result.Success)

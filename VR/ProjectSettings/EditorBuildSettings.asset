@@ -8,12 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainUI.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Demo_01.unity
     guid: a16e070ed04c1c949ad734cb731c6753
-  - enabled: 1
-    path: Assets/Scenes/bahadir.unity
-    guid: 001e80d5d47a947e0b174015eebe7de1
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 01ea7930309561f41b6077d77d280043, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 124fdcbd8bf18ea44b3eb5da954d3c79, type: 2}
