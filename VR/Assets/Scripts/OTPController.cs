@@ -70,6 +70,8 @@ public class OTPController : MonoBehaviour
                         Client.AccessToken = statusResponse.tokens.accessToken;
                         Client.IdToken = statusResponse.tokens.idToken;
 
+                        ScaryVerseState.IsAuthenticated = true;
+
                         GameObject homeScreen = GameObject.Find("HomeScreen");
                         gameObject.SetActive(false);
                         homeScreen.transform.GetChild(0).gameObject.SetActive(true);

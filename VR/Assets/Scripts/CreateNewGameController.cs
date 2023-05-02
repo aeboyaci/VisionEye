@@ -102,7 +102,10 @@ public class CreateNewGameController : MonoBehaviour
             Destroy(onlinePlayerObjectMap[key].gameObject);
             onlinePlayerObjectMap.Remove(key);
         }
+        string teamName = ScaryVerseState.ActiveTeamName;
         resetOrInitializeVariables();
+
+        teamNameInputField.text = teamName;
 
         numberOfPlayersText.text = "Players (1/4)";
         teamPlayerIds.Add(ScaryVerseState.PlayerId);
@@ -142,6 +145,7 @@ public class CreateNewGameController : MonoBehaviour
         onlinePlayerObjectMap = new Dictionary<string, SendingInvitation>();
 
         teamNameInputField.text = "";
+        ScaryVerseState.ActiveTeamName = "";
     }
 
     private void goBackButtonOnClick()
@@ -177,6 +181,7 @@ public class CreateNewGameController : MonoBehaviour
         }
 
         teamNameInputField.text = teamName;
+        ScaryVerseState.ActiveTeamName = teamName;
         StartCoroutine(Update_Coroutine(teamName));
     }
 

@@ -6,4 +6,6 @@ public class ScaryVerseState
     public static string ActiveTeamId { get; set; }
     public static string ActiveGameId { get; set; }
     public static bool IsCaptain { get; set; }
+    public static bool IsAuthenticated { get; set; }
+    public static string ActiveTeamName { get; set; }
 }
