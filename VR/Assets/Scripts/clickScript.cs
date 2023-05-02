@@ -28,7 +28,7 @@ public class clickScript : MonoBehaviour
 
 
         }
-        Invoke("WaitAndDoSomething", 2f);
+        Invoke("WaitAndDoSomething", 0.5f);
 
 
         cubeColorControl.cubePassForDoor = cubeColorControl.cubePassForDoor + textOfButton.text;
