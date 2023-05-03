@@ -252,7 +252,7 @@ namespace Photon.VR
             PhotonNetwork.LocalPlayer.CustomProperties["Cosmetics"] = JsonUtility.ToJson(Cosmetics);
 
             if (JoinRoomOnConnect)
-                JoinPrivateRoom("VISIONEYEBIL496");
+                JoinPrivateRoom(ScaryVerseState.ActiveTeamId == null || ScaryVerseState.ActiveTeamId.Equals("") ? "VISIONEYEBIL496" : ScaryVerseState.ActiveTeamId);
         }
 
         /// <summary>
