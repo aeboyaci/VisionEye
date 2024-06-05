@@ -20,6 +20,7 @@
   - Trivia Quiz API
 
 ![vr-example-scene-1](https://github.com/aeboyaci/VisionEye/assets/53049910/03094ff9-6474-4e50-942b-04e2dce0c073)
+![vr-sample-scene-2](https://github.com/aeboyaci/VisionEye/assets/53049910/5265b6b8-b72e-4996-9e65-46d5cbeab979)
 
 ## System Architecture
 ![system-architecture](https://github.com/aeboyaci/VisionEye/assets/53049910/5b3a156a-ac1c-40e4-a695-198633d5d511)
